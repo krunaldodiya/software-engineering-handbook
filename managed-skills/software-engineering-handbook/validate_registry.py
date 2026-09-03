@@ -1294,6 +1294,15 @@ def main() -> None:
         purpose_catalog,
         all_originals,
     )
+    readme = " ".join((REPO_ROOT / "README.md").read_text().split())
+    check(
+        f"{purpose_count} normalized purposes" in readme,
+        "README normalized purpose count",
+    )
+    check(
+        f"{len(native_purposes)} handbook-native capabilities" in readme,
+        "README native purpose count",
+    )
     id_set = {str(capability["id"]) for capability in capabilities}
     forbidden = strings(policy.get("forbidden_original_routers"))
     covered: dict[str, set[str]] = {provider: set() for provider in provider_names}

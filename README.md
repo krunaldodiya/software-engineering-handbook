@@ -3,7 +3,7 @@
 A public, risk-scaled software-engineering handbook and sparse
 mixture-of-experts skill router for humans, teams, and AI coding agents.
 
-**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 75 normalized purposes · MIT**
+**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 74 normalized purposes · MIT**
 
 > **Context-first:** agents discover a tiny descriptor at startup and load only
 > the handbook and expert sections required by the current task.
@@ -78,8 +78,8 @@ command.
   quality, testing and debugging, Git/CI/CD/security, and atomic delivery.
 - Risk tiers from localized reversible work through critical irreversible work.
 - A machine-readable registry containing 8 reviewed providers, 11 provider
-  groups, and 90 provider-qualified originals plus five handbook-native
-  capabilities, normalized into 75 purposes.
+  groups, and 90 provider-qualified originals plus 4 handbook-native
+  capabilities, normalized into 74 purposes.
 - Deduplicated MoE routing: each original belongs to exactly one purpose.
   Equivalent skills are ordered alternatives, so only one original or fallback
   can load for that purpose.
