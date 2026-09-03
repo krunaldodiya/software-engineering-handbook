@@ -105,10 +105,14 @@ software-development workflow expert.
   The pinned `LICENSE` is MIT.
 
 `ponytail`, `ponytail-review`, `ponytail-audit`, and `ponytail-debt` map to
-`experts/ponytail-simplicity.md`. The fallback preserves the comprehension-first
-ladder and safety exclusions. `ponytail-gain`, `ponytail-help`, intensity modes,
-benchmark claims, hooks, state files, subagent injection, and install/uninstall
-effects are not engineering capabilities and are not bundled.
+`experts/ponytail-simplicity.md`. The fallback preserves the
+comprehension-first implementation ladder, root-cause placement, safety
+exclusions, over-engineering diff review and repository audit, and shortcut-debt
+ledger. It is a complete replacement for Ponytail's engineering behavior, so a
+standalone Ponytail installation is optional. `ponytail-gain`, `ponytail-help`,
+intensity modes, benchmark claims, hooks, state files, subagent injection, and
+install/uninstall effects are product interfaces or runtime behavior and are
+not bundled.
 
 #### Addy Osmani Agent Skills
 
@@ -130,6 +134,12 @@ preferred per skill. The `using-agent-skills` meta-router is prohibited.
 Shared-reference loss, provider hooks, commands, personas, fixed thresholds, and
 whole-pack context loading are not imported. The internal modules use handbook
 authority and load only the selected section.
+
+`experts/context-economics.md` is handbook-native rather than an imported
+provider capability. It owns token, context-window, cache, model, tool, and
+agent-cost optimization; `context-engineering` continues to own context quality
+and source selection. This separation prevents cost pressure from weakening
+authority, evidence, or the context required for a correct result.
 
 #### Understand Anything
 
@@ -291,7 +301,9 @@ deduplicated semantic purposes. `experts/resolution.md` defines selection.
 
 Portable capabilities are separated by responsibility under
 `skills/software-engineering-handbook/experts/`. The compact main skill contains
-only the fast routing index; modules load progressively.
+only the fast routing index; modules load progressively. Internal fallbacks are
+complete for the supported engineering behaviors; provider packages remain
+optional and are never installation prerequisites.
 
 New providers use the same stable path: pin and review the source; map each
 original to an existing purpose before proposing a demonstrably distinct new

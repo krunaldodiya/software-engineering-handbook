@@ -48,6 +48,7 @@ compact index and load only the selected module or trusted original skill:
 | durable spec/change artifacts, consistency analysis, convergence, or canonical archive | the selected section of `experts/spec-delivery.md` |
 | multi-slice agile planning, readiness, course correction, status, walkthrough, or retrospective | the selected section of `experts/adaptive-agile.md` |
 | unfamiliar context, external API facts, or high-consequence uncertainty | `experts/context-sources.md` |
+| context/token pressure, repeated payloads, usage cost, or model/agent economics | `experts/context-economics.md` |
 | public interface, API, frontend, interaction, or accessibility | `experts/interfaces-ui.md` |
 | implementation, test, browser, review, security, performance, CI/CD, migration, observability, or launch | the selected section of `experts/quality-operations.md` |
 | large/unfamiliar codebase map, architecture orientation, or impact analysis | `experts/code-comprehension.md` |
@@ -60,6 +61,17 @@ current risk requires it. Exceed those budgets only for named non-overlapping
 risks and record why. A module containing several sections loads only the
 selected section. Reuse an unchanged module
 already present in uncompacted context.
+
+### Default implementation economy
+
+Every coding task applies this baseline without requiring another installed
+skill: understand the affected flow, reject speculative work, reuse the
+repository, prefer the standard library, then native platform features, then an
+already approved dependency, and only then write the smallest direct
+implementation. Fix the narrowest shared root cause and remove obsolete paths.
+Minimalism never reduces required scope, validation, safety, accessibility,
+error handling, or evidence. Load `experts/ponytail-simplicity.md` only for an
+explicit simplification, over-engineering review, audit, or debt-ledger need.
 
 ### Original-skill preference
 

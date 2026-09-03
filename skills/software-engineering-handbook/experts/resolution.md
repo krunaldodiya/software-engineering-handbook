@@ -8,8 +8,9 @@ never replace its authority, evidence, or delivery gates.
 
 1. Read `purposes.json` first, then only the relevant `registry.json`
    descriptors.
-2. Resolve the task need to a semantic purpose. Each original is classified
-   exactly once. Entries in an equivalence group's `ordered_alternatives` are
+2. Resolve the task need to a semantic purpose. Each provider original is
+   classified exactly once, and each handbook-native purpose declares one
+   internal route. Entries in an equivalence group's `ordered_alternatives` are
    substitutes, not additional experts.
 3. Match observable task facts against triggers, exclusions, prerequisites, and
    the current lifecycle phase. Topic overlap is not a match.
@@ -25,11 +26,13 @@ never replace its authority, evidence, or delivery gates.
 
 For each selected semantic purpose:
 
-1. If it has an equivalence group, inspect registered descriptors in
-   `ordered_alternatives` order and choose the first trusted candidate whose own
-   trigger matches. Suppress every other alternative. A distinct original uses
-   its singleton purpose and owning registry descriptor. Do not load bodies
-   merely to discover whether a candidate exists.
+1. A handbook-native purpose loads its single internal route and never searches
+   for or requires an external provider. For a provider-backed equivalence
+   group, inspect registered descriptors in `ordered_alternatives` order and
+   choose the first trusted candidate whose own trigger matches. Suppress every
+   other alternative. A distinct original uses its singleton purpose and owning
+   registry descriptor. Do not load bodies merely to discover whether a
+   candidate exists.
 2. A provider-qualified name match is required. For R3–R4 work, verify the
    approved source/version/content identity when the host exposes it; if the
    identity cannot be established, use the purpose fallback and report the

@@ -1,6 +1,13 @@
 {
   "selection_mode": "one_route_per_purpose",
   "singleton_purpose": "provider-qualified original identity",
+  "native_purposes": [
+    {
+      "id": "context-usage-economics",
+      "boundary": "Reduce context, token, model, tool, and agent cost without weakening task success or evidence.",
+      "fallback": "experts/context-economics.md#Context and usage economics expert"
+    }
+  ],
   "equivalence_groups": [
     {
       "id": "ideation",

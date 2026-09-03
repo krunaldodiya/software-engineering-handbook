@@ -15,7 +15,7 @@ REGISTRY = ROOT / "experts" / "registry.json"
 PURPOSES = ROOT / "experts" / "purposes.json"
 SKILL = ROOT / "SKILL.md"
 MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
-PACKAGE_VERSION = "1.2.0"
+PACKAGE_VERSION = "1.3.0"
 SUPPORTED_HARNESSES = (
     "Claude App",
     "Claude Code",
@@ -208,6 +208,12 @@ EXPECTED_SKILL_NAMES = {
 EXPECTED_ORIGINALS = {
     provider: {f"{provider}/{name}" for name in names}
     for provider, names in EXPECTED_SKILL_NAMES.items()
+}
+
+EXPECTED_NATIVE_PURPOSES = {
+    "context-usage-economics": (
+        "experts/context-economics.md#Context and usage economics expert"
+    ),
 }
 
 ALLOWED_EFFECTS = {
@@ -559,7 +565,7 @@ def validate_policy(
     )
     schema_version = data.get("schema_version")
     check(
-        type(schema_version) is int and schema_version == 2,
+        type(schema_version) is int and schema_version == 3,
         "registry schema version",
     )
     check(
@@ -683,15 +689,57 @@ def ordered_strings(value: object, message: str) -> list[str]:
     return result
 
 
+def validate_purpose_metadata(
+    purpose: dict[str, object],
+    expected_fields: set[str],
+    purpose_ids: set[str],
+    boundaries: set[str],
+    label: str,
+) -> tuple[str, str]:
+    check(set(purpose) == expected_fields, f"{label} fields")
+    purpose_id_value = purpose.get("id")
+    boundary_value = purpose.get("boundary")
+    fallback_value = purpose.get("fallback")
+    check(
+        isinstance(purpose_id_value, str) and bool(purpose_id_value.strip()),
+        f"{label} identity",
+    )
+    purpose_id = cast(str, purpose_id_value)
+    check(purpose_id not in purpose_ids, f"duplicate semantic purpose: {purpose_id}")
+    purpose_ids.add(purpose_id)
+    check(
+        isinstance(boundary_value, str) and bool(boundary_value.strip()),
+        f"semantic purpose boundary: {purpose_id}",
+    )
+    boundary = cast(str, boundary_value)
+    check(
+        boundary not in boundaries,
+        f"duplicate semantic purpose boundary: {purpose_id}",
+    )
+    boundaries.add(boundary)
+    check(
+        isinstance(fallback_value, str) and bool(fallback_value.strip()),
+        f"semantic purpose fallback: {purpose_id}",
+    )
+    fallback = cast(str, fallback_value)
+    fallback_path = (ROOT / fallback.split("#", 1)[0]).resolve()
+    check(
+        fallback_path.is_relative_to(REPO_ROOT.resolve()) and fallback_path.is_file(),
+        f"semantic purpose fallback path: {purpose_id}",
+    )
+    return purpose_id, fallback
+
+
 def validate_semantic_purposes(
     catalog: dict[str, object],
     originals: set[str],
-) -> tuple[list[dict[str, object]], int]:
+) -> tuple[list[dict[str, object]], list[dict[str, object]], int]:
     check(
         set(catalog)
         == {
             "selection_mode",
             "singleton_purpose",
+            "native_purposes",
             "equivalence_groups",
             "distinct_originals",
         },
@@ -705,6 +753,14 @@ def validate_semantic_purposes(
         catalog.get("singleton_purpose") == "provider-qualified original identity",
         "singleton semantic purpose rule",
     )
+    raw_native_value = catalog.get("native_purposes")
+    check(isinstance(raw_native_value, list), "native semantic purposes")
+    raw_native = cast(list[object], raw_native_value)
+    check(
+        all(isinstance(purpose, dict) for purpose in raw_native),
+        "native semantic purpose schema",
+    )
+    native_purposes = cast(list[dict[str, object]], raw_native)
     raw_groups_value = catalog.get("equivalence_groups")
     check(isinstance(raw_groups_value, list), "semantic equivalence groups")
     raw_groups = cast(list[object], raw_groups_value)
@@ -716,43 +772,29 @@ def validate_semantic_purposes(
     purpose_ids: set[str] = set()
     boundaries: set[str] = set()
     assigned: set[str] = set()
+    for purpose in native_purposes:
+        validate_purpose_metadata(
+            purpose,
+            {"id", "boundary", "fallback"},
+            purpose_ids,
+            boundaries,
+            "native semantic purpose",
+        )
+    check(
+        {
+            cast(str, purpose["id"]): cast(str, purpose["fallback"])
+            for purpose in native_purposes
+        }
+        == EXPECTED_NATIVE_PURPOSES,
+        "native semantic purpose inventory",
+    )
     for group in groups:
-        check(
-            set(group) == {"id", "boundary", "fallback", "ordered_alternatives"},
-            "semantic equivalence group fields",
-        )
-        purpose_id_value = group.get("id")
-        boundary_value = group.get("boundary")
-        fallback_value = group.get("fallback")
-        check(
-            isinstance(purpose_id_value, str) and bool(purpose_id_value.strip()),
-            "semantic purpose identity",
-        )
-        purpose_id = cast(str, purpose_id_value)
-        check(
-            purpose_id not in purpose_ids, f"duplicate semantic purpose: {purpose_id}"
-        )
-        purpose_ids.add(purpose_id)
-        check(
-            isinstance(boundary_value, str) and bool(boundary_value.strip()),
-            f"semantic purpose boundary: {purpose_id}",
-        )
-        boundary = cast(str, boundary_value)
-        check(
-            boundary not in boundaries,
-            f"duplicate semantic purpose boundary: {purpose_id}",
-        )
-        boundaries.add(boundary)
-        check(
-            isinstance(fallback_value, str) and bool(fallback_value.strip()),
-            f"semantic purpose fallback: {purpose_id}",
-        )
-        fallback = cast(str, fallback_value)
-        fallback_path = (ROOT / fallback.split("#", 1)[0]).resolve()
-        check(
-            fallback_path.is_relative_to(REPO_ROOT.resolve())
-            and fallback_path.is_file(),
-            f"semantic purpose fallback path: {purpose_id}",
+        purpose_id, _ = validate_purpose_metadata(
+            group,
+            {"id", "boundary", "fallback", "ordered_alternatives"},
+            purpose_ids,
+            boundaries,
+            "semantic equivalence group",
         )
         alternatives = ordered_strings(
             group.get("ordered_alternatives"),
@@ -783,7 +825,7 @@ def validate_semantic_purposes(
         )
         assigned.add(identity)
     check(assigned == originals, "unclassified semantic originals")
-    return groups, len(groups) + len(distinct)
+    return native_purposes, groups, len(native_purposes) + len(groups) + len(distinct)
 
 
 def choose_semantic_purpose(
@@ -1005,7 +1047,7 @@ def main() -> None:
         for identity in strings(capability["original_skills"])
     }
     purpose_catalog = load_json_object(PURPOSES)
-    purpose_groups, purpose_count = validate_semantic_purposes(
+    native_purposes, purpose_groups, purpose_count = validate_semantic_purposes(
         purpose_catalog,
         all_originals,
     )
@@ -1087,6 +1129,13 @@ def main() -> None:
         "duplicate capability contract was accepted",
     )
     active_purpose_routes: list[tuple[str, str]] = []
+    for purpose in native_purposes:
+        active_purpose_routes.append(
+            (
+                cast(str, purpose["id"]),
+                f"fallback:{cast(str, purpose['fallback'])}",
+            )
+        )
     for group in purpose_groups:
         purpose_id = cast(str, group["id"])
         alternatives = ordered_strings(
@@ -1195,6 +1244,17 @@ def main() -> None:
     expect_failure(
         lambda: validate_semantic_purposes(duplicate_alternative, all_originals),
         "duplicate semantic purpose alternative was accepted",
+    )
+
+    invalid_native_fallback = copy.deepcopy(purpose_catalog)
+    invalid_native_purposes = cast(
+        list[dict[str, object]],
+        invalid_native_fallback["native_purposes"],
+    )
+    invalid_native_purposes[0]["fallback"] = "experts/missing-context-economics.md"
+    expect_failure(
+        lambda: validate_semantic_purposes(invalid_native_fallback, all_originals),
+        "missing native semantic fallback was accepted",
     )
     invalid_schema = copy.deepcopy(data)
     invalid_schema["schema_version"] = 999
@@ -1341,6 +1401,18 @@ def main() -> None:
     check(
         result == {"ponytail.simplicity": f"original:{ponytail_identity}"},
         "positive original route",
+    )
+    result = resolve(
+        capabilities,
+        facts={"coding"},
+        available_requirements=set(),
+        registered_originals={},
+        trusted_originals=set(),
+        budget=budgets["R1"],
+    )
+    check(
+        result == {"ponytail.simplicity": "fallback:experts/ponytail-simplicity.md"},
+        "absent Ponytail replacement fallback",
     )
     result = resolve(
         capabilities,

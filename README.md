@@ -3,7 +3,7 @@
 A public, risk-scaled software-engineering handbook and sparse
 mixture-of-experts skill router for humans, teams, and AI coding agents.
 
-**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 70 normalized purposes · MIT**
+**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 71 normalized purposes · MIT**
 
 > **Context-first:** agents discover a tiny descriptor at startup and load only
 > the handbook and expert sections required by the current task.
@@ -85,13 +85,19 @@ For explicit use, ask the agent to “apply the software-engineering handbook”
 invoke `software-engineering-handbook` through the harness's skill UI or slash
 command.
 
+> **One installation is enough.** Reviewed provider skills are optional
+> compatibility inputs, not dependencies. The handbook includes complete
+> internal fallbacks and does not require Superpowers, Ponytail, Agent Skills,
+> Spec Kit, OpenSpec, BMAD, or another workflow pack to be installed.
+
 ## Features
 
 - Five portable chapters covering lifecycle governance, architecture and code
   quality, testing and debugging, Git/CI/CD/security, and atomic delivery.
 - Risk tiers from localized reversible work through critical irreversible work.
 - A machine-readable registry containing 8 reviewed providers, 11 provider
-  groups, and 90 provider-qualified originals normalized into 70 purposes.
+  groups, and 90 provider-qualified originals plus one handbook-native
+  context-usage capability, normalized into 71 purposes.
 - Deduplicated MoE routing: each original belongs to exactly one purpose.
   Equivalent skills are ordered alternatives, so only one original or fallback
   can load for that purpose.
@@ -100,6 +106,13 @@ command.
   BMAD Method.
 - Trusted-original preference: use a compatible installed original skill when
   available; otherwise load the bounded internal fallback, never both.
+- Built-in context and usage economics: progressive disclosure, duplicate
+  instruction removal, cache-aware context reuse, bounded tool/agent fan-out,
+  risk-scaled model choice, and honest before/after token and cost evidence.
+- Built-in Ponytail engineering behavior: comprehension-first minimal
+  implementation, root-cause placement, over-engineering review and audit, and
+  shortcut-debt reporting. Ponytail's intensity modes, help card, benchmark
+  scoreboard, hooks, and persistent mode state remain intentionally unbundled.
 - Explicit authority, evidence, conflict, failure, rollback, and context-budget
   rules.
 
