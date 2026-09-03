@@ -114,13 +114,11 @@ measured savings.
 
 ## Host controls
 
-Use native usage and compaction controls instead of adding another dependency.
-For OMP, `omp stats` inspects session usage, `omp usage` inspects provider limits,
-and `/compact` is available when a safe summary boundary is reached. Use more
-specialized pruning or compaction only when configured and verified for the
-active model; do not compact reflexively when a stable cached prefix is cheaper.
-Other harness adapters should bind equivalent commands without changing this
-contract.
+Use host-native usage and compaction controls instead of adding another
+dependency. A scoped host adapter MAY bind concrete commands, metrics, and
+reset boundaries without changing this portable contract. Use specialized
+pruning or compaction only when configured and verified for the active model;
+do not compact reflexively when a stable cached prefix is cheaper.
 
 ## Evidence
 

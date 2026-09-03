@@ -1,6 +1,6 @@
 {
   "name": "software-engineering-handbook",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Risk-scaled software-engineering handbook with sparse expert routing",
   "type": "module",
   "main": ".opencode/plugins/software-engineering-handbook.js",
@@ -16,6 +16,22 @@
     "code-review",
     "testing",
     "security"
+  ],
+  "files": [
+    ".agents",
+    ".claude-plugin",
+    ".codex-plugin",
+    ".kimi-plugin",
+    ".opencode",
+    "handbook",
+    "managed-skills",
+    "rules",
+    "skills",
+    "GEMINI.md",
+    "LICENSE",
+    "README.md",
+    "gemini-extension.json",
+    "plugin.json"
   ],
   "pi": {
     "skills": [

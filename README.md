@@ -3,7 +3,7 @@
 A public, risk-scaled software-engineering handbook and sparse
 mixture-of-experts skill router for humans, teams, and AI coding agents.
 
-**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 74 normalized purposes · MIT**
+**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 75 normalized purposes · MIT**
 
 > **Context-first:** agents discover a tiny descriptor at startup and load only
 > the handbook and expert sections required by the current task.
@@ -11,13 +11,11 @@ mixture-of-experts skill router for humans, teams, and AI coding agents.
 ## Table of contents
 
 - [Quick start](#quick-start)
-  - [Pi](#pi)
-  - [Oh My Pi](#oh-my-pi)
 - [Usage](#usage)
 - [Features](#features)
 - [How it works without filling the context window](#how-it-works-without-filling-the-context-window)
 - [Directory roles](#directory-roles)
-- [Install on other agents](#install-on-other-agents)
+- [Install on supported agents](#install-on-supported-agents)
   - [Claude App](#claude-app)
   - [Claude Code](#claude-code)
   - [Antigravity](#antigravity)
@@ -27,6 +25,8 @@ mixture-of-experts skill router for humans, teams, and AI coding agents.
   - [Kimi Code CLI](#kimi-code-cli)
   - [OpenCode](#opencode)
   - [Hermes Agent](#hermes-agent)
+  - [Pi](#pi)
+  - [Oh My Pi](#oh-my-pi)
 - [Future harness support](#future-harness-support)
 - [Updating](#updating)
 - [Repository contents](#repository-contents)
@@ -37,32 +37,14 @@ mixture-of-experts skill router for humans, teams, and AI coding agents.
 
 ## Quick start
 
-### Pi
+Choose the scoped installation procedure for your host under
+[install on supported agents](#install-on-supported-agents). Each procedure
+installs or retains the complete package: portable skill, handbook, registry,
+and the applicable host adapter. The canonical skill references sibling
+handbook sources, so a skill-only copy is incomplete.
 
-```sh
-pi install git:github.com/krunaldodiya/software-engineering-handbook
-```
-
-Try without installing:
-
-```sh
-pi -e git:github.com/krunaldodiya/software-engineering-handbook
-```
-
-### Oh My Pi
-
-```sh
-omp plugin install github:krunaldodiya/software-engineering-handbook
-```
-
-Start a new session after installation. The skill activates automatically for
-non-trivial software-engineering work, or you can invoke
-`/skill:software-engineering-handbook` explicitly where skill commands are
-supported.
-
-See [install on other agents](#install-on-other-agents) for Claude App, Claude
-Code, Antigravity, Codex App, Codex CLI, Gemini CLI, Kimi Code CLI, OpenCode,
-and Hermes Agent. Pi and Oh My Pi are in [quick start](#quick-start).
+Review the repository and pin a trusted tag or commit when the host supports
+immutable references. Start a new agent session after installation.
 
 ## Usage
 
@@ -96,8 +78,8 @@ command.
   quality, testing and debugging, Git/CI/CD/security, and atomic delivery.
 - Risk tiers from localized reversible work through critical irreversible work.
 - A machine-readable registry containing 8 reviewed providers, 11 provider
-  groups, and 90 provider-qualified originals plus four handbook-native context
-  capabilities, normalized into 74 purposes.
+  groups, and 90 provider-qualified originals plus five handbook-native
+  capabilities, normalized into 75 purposes.
 - Deduplicated MoE routing: each original belongs to exactly one purpose.
   Equivalent skills are ordered alternatives, so only one original or fallback
   can load for that purpose.
@@ -110,6 +92,9 @@ command.
   and handoff, recurring harness-surface audits, progressive disclosure,
   cache-aware reuse, bounded tool/agent fan-out, risk-scaled model choice, and
   honest total-task token and cost evidence.
+- Governed procedure and skill improvement: causal triggers, bounded candidates,
+  representative development and held-out cases, hard safety gates, independent
+  approval for high-risk changes, rejected-candidate evidence, and rollback.
 - Built-in Ponytail engineering behavior: comprehension-first minimal
   implementation, root-cause placement, over-engineering review and audit, and
   shortcut-debt reporting. Ponytail's intensity modes, help card, benchmark
@@ -153,7 +138,7 @@ They are related, but not duplicates:
 is the installable skill/package identity. Keeping the book separate from the
 router lets humans browse it normally while agents load only selected sections.
 
-## Install on other agents
+## Install on supported agents
 
 Installation changes local agent configuration and packages can influence agent
 actions. Review the repository and pin a trusted tag or commit when your harness
@@ -244,6 +229,28 @@ hermes plugins install krunaldodiya/software-engineering-handbook --enable
 Hermes uses the code-free Agent Plugins v1 manifest at `plugin.json`. It
 discovers the portable skill without a startup hook or router-body injection.
 
+### Pi
+
+```sh
+pi install git:github.com/krunaldodiya/software-engineering-handbook
+```
+
+Try without installing:
+
+```sh
+pi -e git:github.com/krunaldodiya/software-engineering-handbook
+```
+
+### Oh My Pi
+
+```sh
+omp plugin install github:krunaldodiya/software-engineering-handbook
+```
+
+Start a new session after installation. Invoke
+`/skill:software-engineering-handbook` explicitly where skill commands are
+supported.
+
 ## Future harness support
 
 These integrations are intentionally deferred:
@@ -256,14 +263,9 @@ These integrations are intentionally deferred:
 
 ## Updating
 
-Use the harness's normal plugin update command. For Pi:
-
-```sh
-pi update --extension git:github.com/krunaldodiya/software-engineering-handbook
-```
-
-For reproducible use, install a reviewed tag or commit instead of a moving
-branch. Pi accepts `@<tag-or-commit>` after the repository path.
+Use the selected harness's normal plugin or skill update mechanism. For
+reproducible use, install a reviewed tag or commit instead of a moving branch
+when the harness supports immutable references.
 
 ## Repository contents
 

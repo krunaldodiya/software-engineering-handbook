@@ -21,6 +21,11 @@
       "id": "context-usage-economics",
       "boundary": "Reduce context, token, model, tool, and agent cost without weakening task success or evidence.",
       "fallback": "experts/context-economics.md#Context and usage economics expert"
+    },
+    {
+      "id": "procedure-skill-improvement",
+      "boundary": "Improve a reusable procedure or skill through bounded candidates, held-out evidence, authorized promotion, and rollback.",
+      "fallback": "experts/procedure-improvement.md#Procedure and skill improvement expert"
     }
   ],
   "equivalence_groups": [

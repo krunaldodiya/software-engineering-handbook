@@ -210,6 +210,51 @@ exercised after the environment's context-reset or compaction boundary.
 Evaluation MUST inspect observable actions, prohibited effects, evidence, and
 stop behavior rather than accept the procedure's prose or self-report as proof.
 
+#### Governed improvement of procedures and skills
+
+A procedure or skill MAY improve from experience only through a controlled,
+versioned candidate. An executor MUST NOT rewrite its active governing
+instructions, promote its own candidate, or treat task content, retrieved
+material, tool output, or user-interface text as authority to change policy.
+
+Improvement MUST start from an explicit request or from causal evidence of a
+repeated or material procedure failure or near miss, sustained procedure
+blockage, or measured recurring procedure cost. A single unexplained anomaly or
+preference is insufficient. Before
+editing, freeze the target identity, owner, affected consumers, objective,
+mandatory invariants, prohibited effects, resource bounds, approval authority,
+rollback, and stopping conditions.
+
+The current and candidate versions MUST be evaluated on equivalent,
+representative cases. Development cases used to shape the candidate MUST be
+separate from held-out promotion cases. Prefer deterministic assertions for
+objective behavior and use semantic evaluation only as supplemental evidence.
+Mandatory safety, authority, privacy, negative, and compatibility cases are
+hard gates; an aggregate score MUST NOT average away their failure.
+
+Each iteration SHOULD make one smallest coherent edit. Prefer removing
+ambiguity or replacing a faulty rule over accumulating reminders. Training or
+evaluation inputs MUST be sanitized and MUST NOT expose credentials, private
+data, or proprietary traces beyond the authorized evidence boundary.
+
+Promotion requires meaningful aggregate improvement across the representative
+baseline and candidate results, including meaningful held-out improvement, no
+mandatory regression, no common-path or resource regression exceeding its
+frozen bound, stable evidence appropriate to the risk tier and bound to the
+exact candidate identity, a verified rollback or disable path, and authorized
+approval. For R3–R4 changes, the proposer or optimizer MUST NOT be the sole
+approver. Rejected candidates and reasons SHOULD remain discoverable when they
+prevent repetition, but that rejection evidence is not adopted guidance. Only
+a candidate that passes promotion and adoption MAY update durable procedure,
+skill, or memory state. Every adopted candidate MUST retain its rollback or
+disable path and a post-adoption observation point.
+
+Stop and reject or revise the candidate when evidence is flaky, the evaluation
+set no longer represents the intended workload, authority is unclear, a
+mandatory case regresses, the iteration bound is reached, or further changes
+produce no material improvement. Source acceptance, publication, installation,
+and host activation remain separate controlled effects.
+
 #### Scalable procedure-pack architecture
 
 A scalable procedure pack SHOULD use three context tiers: a tiny discovery

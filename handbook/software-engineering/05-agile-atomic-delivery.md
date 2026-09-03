@@ -199,6 +199,15 @@ A retrospective MUST use observed evidence, distinguish system conditions from b
 
 Improvement work MUST enter the same visible ordering and WIP system as other work. Retrospective action counts MUST NOT substitute for evidence that flow, quality, safety, or value improved.
 
+When the improvement changes a reusable procedure or skill, its retrospective
+action is a candidate, not an automatically adopted rule. The owner MUST
+evaluate the current and candidate versions against representative development
+and held-out cases, retain mandatory safety and authority checks as hard gates,
+and adopt only a materially better non-regressing candidate through normal
+change control. A failed or inconclusive candidate SHOULD be rejected rather
+than accumulated as additional instruction text. Chapter 2 §12 defines the
+governed procedure-improvement contract.
+
 ### 12. Bound autonomy by goal, authority, and risk
 
 An executing person or agent SHOULD be free to choose implementation sequence, local techniques, and internal task decomposition within the approved goal, architecture, repository rules, risk controls, and WIP policy. If that autonomy is constrained further, the constraint and its decision purpose MUST be explicit rather than inferred from status or tool access.
