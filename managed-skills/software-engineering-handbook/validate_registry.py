@@ -238,9 +238,6 @@ EXPECTED_NATIVE_PURPOSES = {
     "context-usage-economics": (
         "experts/context-economics.md#Context and usage economics expert"
     ),
-    "procedure-skill-improvement": (
-        "experts/procedure-improvement.md#Procedure and skill improvement expert"
-    ),
 }
 
 ALLOWED_EFFECTS = {
@@ -386,6 +383,7 @@ def portable_text_is_harness_neutral(text: str) -> bool:
 def choose_procedure_improvement_route(
     facts: set[str],
     *,
+    trusted_original_available: bool = False,
     fallback_available: bool = True,
 ) -> str:
     explicitly_requested = "explicit-improvement-request" in facts
@@ -397,6 +395,8 @@ def choose_procedure_improvement_route(
         return "not-selected"
     if facts & PROCEDURE_IMPROVEMENT_BLOCKERS:
         return "blocked"
+    if trusted_original_available:
+        return "original:superpowers/writing-skills"
     if not fallback_available:
         return "unavailable"
     return (
@@ -948,11 +948,12 @@ def validate_semantic_purposes(
             group.get("ordered_alternatives"),
             f"semantic purpose alternatives: {purpose_id}",
         )
-        check(len(alternatives) >= 2, f"singleton equivalence group: {purpose_id}")
-        check(
-            len({identity.partition("/")[0] for identity in alternatives}) >= 2,
-            f"single-provider equivalence group: {purpose_id}",
-        )
+        check(alternatives, f"empty provider-backed purpose: {purpose_id}")
+        if len(alternatives) > 1:
+            check(
+                len({identity.partition("/")[0] for identity in alternatives}) >= 2,
+                f"single-provider equivalence group: {purpose_id}",
+            )
         for identity in alternatives:
             check(identity in originals, f"unknown semantic alternative: {identity}")
             check(
@@ -1151,7 +1152,8 @@ def validate_package(policy: dict[str, object]) -> None:
         "| explicit procedure/skill improvement; or causally attributed procedure "
         "defect evidenced by repeated or material failure/near miss, sustained "
         "blockage, or measured recurring cost; exclude unresolved higher-authority "
-        "conflict and authority/evidence-bypass requests | "
+        "conflict and authority/evidence-bypass requests | trusted "
+        "`superpowers/writing-skills` when available; otherwise "
         "`experts/procedure-improvement.md` |"
         in canonical_skill,
         "procedure improvement fast route",
@@ -1175,6 +1177,8 @@ def validate_package(policy: dict[str, object]) -> None:
     for fragment in (
         "unresolved higher-authority conflict or a request to bypass authority or "
         "evidence",
+        "Keep held-out case contents and individual baseline results sequestered "
+        "from the candidate author until the candidate identity is frozen",
         "aggregate results across the representative evaluation contract show a "
         "meaningful improvement",
         "held-out results independently show a meaningful improvement",
@@ -1414,6 +1418,7 @@ def main() -> None:
         ),
         "duplicate active semantic purpose route was accepted",
     )
+    procedure_original_route = "original:superpowers/writing-skills"
     procedure_route = (
         "fallback:"
         "experts/procedure-improvement.md#Procedure and skill improvement expert"
@@ -1422,6 +1427,14 @@ def main() -> None:
         choose_procedure_improvement_route({"explicit-improvement-request"})
         == procedure_route,
         "procedure improvement explicit positive route",
+    )
+    check(
+        choose_procedure_improvement_route(
+            {"explicit-improvement-request"},
+            trusted_original_available=True,
+        )
+        == procedure_original_route,
+        "procedure improvement trusted original route",
     )
     for fact in PROCEDURE_IMPROVEMENT_EVIDENCE_TRIGGERS:
         facts = {fact, PROCEDURE_IMPROVEMENT_CAUSAL_FACT}

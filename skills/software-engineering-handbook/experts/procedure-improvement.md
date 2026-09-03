@@ -44,6 +44,10 @@ small.
 
 Create a representative corpus from sanitized evidence. Separate development
 cases used to shape the candidate from held-out cases used only for promotion.
+Keep held-out case contents and individual baseline results sequestered from the
+candidate author until the candidate identity is frozen. An authorized
+independent evaluator MAY execute and retain sealed held-out baseline results
+before then; it MUST NOT reveal case-specific inputs, outputs, or failures.
 The corpus MUST include, where applicable:
 
 - positive and near-miss non-trigger cases;
@@ -66,10 +70,12 @@ failure mechanism.
 
 ## 3. Establish the baseline
 
-Run the current artifact on the evaluation contract before proposing a change.
+Run the current artifact on the development cases before proposing a change.
 Keep relevant conditions equivalent: task boundary, model or executor class,
-inputs, tools, configuration, cache state, and acceptance method. Record passes,
-failures, prohibited effects, resource use, variance, and known limits.
+inputs, tools, configuration, cache state, and acceptance method. Record
+development passes, failures, prohibited effects, resource use, variance, and
+known limits. A sequestered evaluator MAY separately record held-out baseline
+results under the rule above.
 
 A hypothetical baseline, changed workload, or self-reported success is not
 promotion evidence. If the baseline cannot be measured faithfully, narrow the

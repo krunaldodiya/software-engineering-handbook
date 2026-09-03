@@ -228,8 +228,12 @@ rollback, and stopping conditions.
 
 The current and candidate versions MUST be evaluated on equivalent,
 representative cases. Development cases used to shape the candidate MUST be
-separate from held-out promotion cases. Prefer deterministic assertions for
-objective behavior and use semantic evaluation only as supplemental evidence.
+separate from held-out promotion cases.
+Held-out contents and case-specific baseline results MUST remain sequestered
+from the candidate author until the candidate identity is frozen; an authorized
+independent evaluator MAY record them earlier only under seal.
+Prefer deterministic assertions for objective behavior and use semantic
+evaluation only as supplemental evidence.
 Mandatory safety, authority, privacy, negative, and compatibility cases are
 hard gates; an aggregate score MUST NOT average away their failure.
 
