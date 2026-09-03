@@ -141,6 +141,59 @@ agent-cost optimization; `context-engineering` continues to own context quality
 and source selection. This separation prevents cost pressure from weakening
 authority, evidence, or the context required for a correct result.
 
+#### Context and usage optimization source review
+
+- **Expected value:** safer compaction, degradation diagnosis, recurring-surface audits, and total-task cost analysis.
+- **Scope fit:** these refine the handbook-native context-economics boundary without adding a router or runtime.
+- **Material risk:** lossy rewriting, arbitrary thresholds, persistent hooks or daemons, self-preserving tools, and ungrounded savings claims.
+- **Smallest alternative:** adapt only distinct contracts into the existing expert and keep native host controls.
+- **Decision:** **accepted** as consulted inputs only; all four external packs remain uninstalled and non-routing.
+
+- **Julius Brussee, _Caveman_ `caveman-compress` — commit
+  `3b74643f4d910f496babd4e634b1ba7168816f14`, accessed 2026-09-03.**
+  [Versioned skill](https://github.com/JuliusBrussee/caveman/tree/3b74643f4d910f496babd4e634b1ba7168816f14/skills/caveman-compress)
+  · [Skills directory listing](https://skills.sh/juliusbrussee/caveman/caveman-compress).
+  The directory reported 329.0K installs and 102.6K repository stars. Adopted:
+  exact-anchor preservation, recoverable out-of-loader backups, and validation
+  before discarding source. Excluded: overwrite scripts, external model calls,
+  compressed writing style, and package state. The listing's three audits were
+  mixed, so popularity did not authorize installation.
+
+- **Murat Can Koylan, _Agent Skills for Context Engineering_ — commit
+  `6dbe1a1d868eab51a3bc9011b0f55e2891513e40`, accessed 2026-09-03.**
+  [Versioned source](https://github.com/muratcankoylan/agent-skills-for-context-engineering/tree/6dbe1a1d868eab51a3bc9011b0f55e2891513e40)
+  · [Skills directory listing](https://skills.sh/muratcankoylan/agent-skills-for-context-engineering/context-engineering-collection).
+  The directory reported 3.7K installs and 17.9K repository stars. Reviewed the
+  compression, optimization, and degradation skills. Adopted: degradation
+  categories, anchored summaries, continuation probes, re-fetch accounting, and
+  cache-churn awareness. Excluded: full-pack routing, model-specific numerical
+  thresholds, and runtime machinery; the listing showed security warnings.
+
+- **Alex Greensh, _Token Optimizer_ — commit
+  `81628b085641e4c8209926d29848e41e6ef68de5`, accessed 2026-09-03.**
+  [Versioned skill](https://github.com/alexgreensh/token-optimizer/tree/81628b085641e4c8209926d29848e41e6ef68de5/skills/token-optimizer)
+  · [Skills directory listing](https://skills.sh/alexgreensh/token-optimizer/token-optimizer).
+  The directory reported 708 installs and 2.1K repository stars. Adopted:
+  recurring-surface inventory, dependency checks, out-of-discovery backups,
+  exact diffs, and before/after measurement. Excluded: self-preservation,
+  six-agent audits, automatic mutation, hooks, schedulers, daemons, keep-warm
+  traffic, and requests for social actions.
+
+- **ruvnet, _Ruflo_ `cost-optimize` — commit
+  `db4991967c45c6f72133dff0bb80b0a492960fc1`, accessed 2026-09-03.**
+  [Versioned skill](https://github.com/ruvnet/ruflo/tree/db4991967c45c6f72133dff0bb80b0a492960fc1/plugins/ruflo-cost-tracker/skills/cost-optimize)
+  · [Skills directory listing](https://skills.sh/ruvnet/ruflo/cost-optimize).
+  The directory reported 735 installs and 70.2K repository stars. Adopted:
+  recent-usage aggregation, model-to-task fit, cache utilization, and redundant
+  agent analysis. Excluded: Ruflo-specific MCP, memory, hooks, persisted routing
+  patterns, and projected savings without an observed comparable baseline.
+
+The existing Addy Osmani `context-engineering` original was the highest reported
+result for the focused context-engineering search at 28.8K installs. It retains
+context quality and source-selection ownership; the four handbook-native
+purposes own diagnosis, compression continuity, harness-surface audit, and usage
+economics. No external skill is loaded for those native purposes.
+
 #### Understand Anything
 
 - **Egonex, _Understand Anything_ 2.9.4 — commit

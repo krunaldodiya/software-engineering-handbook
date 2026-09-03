@@ -3,7 +3,7 @@
 A public, risk-scaled software-engineering handbook and sparse
 mixture-of-experts skill router for humans, teams, and AI coding agents.
 
-**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 71 normalized purposes · MIT**
+**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 74 normalized purposes · MIT**
 
 > **Context-first:** agents discover a tiny descriptor at startup and load only
 > the handbook and expert sections required by the current task.
@@ -96,8 +96,8 @@ command.
   quality, testing and debugging, Git/CI/CD/security, and atomic delivery.
 - Risk tiers from localized reversible work through critical irreversible work.
 - A machine-readable registry containing 8 reviewed providers, 11 provider
-  groups, and 90 provider-qualified originals plus one handbook-native
-  context-usage capability, normalized into 71 purposes.
+  groups, and 90 provider-qualified originals plus four handbook-native context
+  capabilities, normalized into 74 purposes.
 - Deduplicated MoE routing: each original belongs to exactly one purpose.
   Equivalent skills are ordered alternatives, so only one original or fallback
   can load for that purpose.
@@ -106,9 +106,10 @@ command.
   BMAD Method.
 - Trusted-original preference: use a compatible installed original skill when
   available; otherwise load the bounded internal fallback, never both.
-- Built-in context and usage economics: progressive disclosure, duplicate
-  instruction removal, cache-aware context reuse, bounded tool/agent fan-out,
-  risk-scaled model choice, and honest before/after token and cost evidence.
+- Built-in context and usage economics: degradation diagnosis, safe compression
+  and handoff, recurring harness-surface audits, progressive disclosure,
+  cache-aware reuse, bounded tool/agent fan-out, risk-scaled model choice, and
+  honest total-task token and cost evidence.
 - Built-in Ponytail engineering behavior: comprehension-first minimal
   implementation, root-cause placement, over-engineering review and audit, and
   shortcut-debt reporting. Ponytail's intensity modes, help card, benchmark

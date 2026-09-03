@@ -3,6 +3,21 @@
   "singleton_purpose": "provider-qualified original identity",
   "native_purposes": [
     {
+      "id": "context-degradation-diagnosis",
+      "boundary": "Diagnose lost, poisoned, distracting, confused, or conflicting context before selecting a mitigation.",
+      "fallback": "experts/context-economics.md#Diagnose context degradation"
+    },
+    {
+      "id": "context-compression-continuity",
+      "boundary": "Compact or hand off long-running context while preserving exact task state and recoverability.",
+      "fallback": "experts/context-economics.md#Context compression and continuity"
+    },
+    {
+      "id": "harness-context-audit",
+      "boundary": "Audit recurring instruction, skill, tool, memory, and history overhead before authorized cleanup.",
+      "fallback": "experts/context-economics.md#Harness audit and cleanup"
+    },
+    {
       "id": "context-usage-economics",
       "boundary": "Reduce context, token, model, tool, and agent cost without weakening task success or evidence.",
       "fallback": "experts/context-economics.md#Context and usage economics expert"

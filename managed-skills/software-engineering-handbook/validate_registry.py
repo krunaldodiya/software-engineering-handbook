@@ -15,7 +15,7 @@ REGISTRY = ROOT / "experts" / "registry.json"
 PURPOSES = ROOT / "experts" / "purposes.json"
 SKILL = ROOT / "SKILL.md"
 MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
-PACKAGE_VERSION = "1.3.0"
+PACKAGE_VERSION = "1.4.0"
 SUPPORTED_HARNESSES = (
     "Claude App",
     "Claude Code",
@@ -211,6 +211,13 @@ EXPECTED_ORIGINALS = {
 }
 
 EXPECTED_NATIVE_PURPOSES = {
+    "context-degradation-diagnosis": (
+        "experts/context-economics.md#Diagnose context degradation"
+    ),
+    "context-compression-continuity": (
+        "experts/context-economics.md#Context compression and continuity"
+    ),
+    "harness-context-audit": ("experts/context-economics.md#Harness audit and cleanup"),
     "context-usage-economics": (
         "experts/context-economics.md#Context and usage economics expert"
     ),

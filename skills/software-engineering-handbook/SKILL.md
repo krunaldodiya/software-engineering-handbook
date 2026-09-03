@@ -48,7 +48,7 @@ compact index and load only the selected module or trusted original skill:
 | durable spec/change artifacts, consistency analysis, convergence, or canonical archive | the selected section of `experts/spec-delivery.md` |
 | multi-slice agile planning, readiness, course correction, status, walkthrough, or retrospective | the selected section of `experts/adaptive-agile.md` |
 | unfamiliar context, external API facts, or high-consequence uncertainty | `experts/context-sources.md` |
-| context/token pressure, repeated payloads, usage cost, or model/agent economics | `experts/context-economics.md` |
+| context degradation, compression/handoff, recurring harness overhead, or token/model/agent cost | the selected section of `experts/context-economics.md` |
 | public interface, API, frontend, interaction, or accessibility | `experts/interfaces-ui.md` |
 | implementation, test, browser, review, security, performance, CI/CD, migration, observability, or launch | the selected section of `experts/quality-operations.md` |
 | large/unfamiliar codebase map, architecture orientation, or impact analysis | `experts/code-comprehension.md` |
