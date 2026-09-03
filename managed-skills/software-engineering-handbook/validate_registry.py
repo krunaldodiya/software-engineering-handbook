@@ -34,7 +34,6 @@ DEFERRED_HARNESSES = (
     "Factory Droid",
     "GitHub Copilot CLI",
     "Grok Build CLI",
-    "Kimi App",
 )
 
 REQUIRED_FIELDS = {
@@ -477,6 +476,37 @@ def validate_descriptor_shape(capability: dict[str, object]) -> None:
     )
 
 
+def validate_capability_uniqueness(
+    capabilities: list[dict[str, object]],
+) -> None:
+    capability_ids: set[str] = set()
+    identities: dict[str, str] = {}
+    signatures: dict[tuple[str, frozenset[str], frozenset[str]], str] = {}
+    for capability in capabilities:
+        capability_id = str(capability.get("id"))
+        check(
+            capability_id not in capability_ids,
+            f"duplicate capability identity: {capability_id}",
+        )
+        capability_ids.add(capability_id)
+        signature = (
+            str(capability.get("kind")),
+            frozenset(strings(capability.get("triggers"))),
+            frozenset(strings(capability.get("outputs"))),
+        )
+        check(
+            signature not in signatures,
+            f"duplicate capability contract: {capability_id}",
+        )
+        signatures[signature] = capability_id
+        for original in strings(capability.get("original_skills")):
+            check(
+                original not in identities,
+                f"duplicate original capability ownership: {original}",
+            )
+            identities[original] = capability_id
+
+
 def choose(capability: dict[str, object], matched: set[str], trusted: set[str]) -> str:
     matches = strings(capability["original_skills"]) & matched & trusted
     if matches:
@@ -765,6 +795,28 @@ def validate_package(policy: dict[str, object]) -> None:
     )
 
     readme = (REPO_ROOT / "README.md").read_text()
+    toc_start = readme.find("## Table of contents")
+    quick_start = readme.find("## Quick start")
+    check(0 <= toc_start < quick_start, "README table of contents position")
+    toc = readme[toc_start:quick_start]
+    for section in (
+        "Quick start",
+        "Usage",
+        "Features",
+        "How it works without filling the context window",
+        "Directory roles",
+        "Install on other agents",
+        "Future harness support",
+        "Updating",
+        "Repository contents",
+        "Validate and contribute",
+        "Safety and repository boundary",
+        "Upstream attribution",
+        "License",
+    ):
+        check(f"[{section}]" in toc, f"README table of contents: {section}")
+    for harness in SUPPORTED_HARNESSES:
+        check(f"[{harness}]" in toc, f"README harness index: {harness}")
     for harness in SUPPORTED_HARNESSES:
         check(f"### {harness}" in readme, f"README install section: {harness}")
     for harness in DEFERRED_HARNESSES:
@@ -788,9 +840,8 @@ def main() -> None:
     raw_capabilities = data.get("capabilities")
     check(isinstance(raw_capabilities, list), "capabilities must be a list")
     capabilities = cast(list[dict[str, object]], raw_capabilities)
-    ids = [str(capability.get("id")) for capability in capabilities]
-    check(len(ids) == len(set(ids)), "duplicate capability identities")
-    id_set = set(ids)
+    validate_capability_uniqueness(capabilities)
+    id_set = {str(capability["id"]) for capability in capabilities}
     forbidden = strings(policy.get("forbidden_original_routers"))
     covered: dict[str, set[str]] = {provider: set() for provider in provider_names}
 
@@ -808,10 +859,6 @@ def main() -> None:
         originals = strings(capability.get("original_skills"))
         check(originals, f"no original capability identities: {capability_id}")
         check(forbidden.isdisjoint(originals), f"forbidden router: {capability_id}")
-        check(
-            covered[provider].isdisjoint(originals),
-            f"duplicate provider capability: {capability_id}",
-        )
         for identity in originals:
             prefix, separator, name = identity.partition("/")
             check(
@@ -855,6 +902,22 @@ def main() -> None:
 
     check(covered == EXPECTED_ORIGINALS, "provider capability coverage")
     validate_dependency_graph(capabilities)
+    duplicate_original = copy.deepcopy(capabilities)
+    repeated_original = min(strings(duplicate_original[0]["original_skills"]))
+    cast(list[object], duplicate_original[1]["original_skills"]).append(
+        repeated_original
+    )
+    expect_failure(
+        lambda: validate_capability_uniqueness(duplicate_original),
+        "duplicate original capability ownership was accepted",
+    )
+    duplicate_contract = copy.deepcopy(capabilities)
+    for field in ("kind", "triggers", "outputs"):
+        duplicate_contract[1][field] = copy.deepcopy(duplicate_contract[0][field])
+    expect_failure(
+        lambda: validate_capability_uniqueness(duplicate_contract),
+        "duplicate capability contract was accepted",
+    )
     invalid_schema = copy.deepcopy(data)
     invalid_schema["schema_version"] = 999
     expect_failure(

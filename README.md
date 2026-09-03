@@ -3,12 +3,50 @@
 A public, risk-scaled software-engineering handbook and sparse
 mixture-of-experts skill router for humans, teams, and AI coding agents.
 
+**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 90 capabilities · MIT**
+
+> **Context-first:** agents discover a tiny descriptor at startup and load only
+> the handbook and expert sections required by the current task.
+
+## Table of contents
+
+- [Quick start](#quick-start)
+  - [Pi](#pi)
+  - [Oh My Pi](#oh-my-pi)
+- [Usage](#usage)
+- [Features](#features)
+- [How it works without filling the context window](#how-it-works-without-filling-the-context-window)
+- [Directory roles](#directory-roles)
+- [Install on other agents](#install-on-other-agents)
+  - [Claude App](#claude-app)
+  - [Claude Code](#claude-code)
+  - [Antigravity](#antigravity)
+  - [Codex App](#codex-app)
+  - [Codex CLI](#codex-cli)
+  - [Gemini CLI](#gemini-cli)
+  - [Kimi Code CLI](#kimi-code-cli)
+  - [OpenCode](#opencode)
+  - [Hermes Agent](#hermes-agent)
+- [Future harness support](#future-harness-support)
+- [Updating](#updating)
+- [Repository contents](#repository-contents)
+- [Validate and contribute](#validate-and-contribute)
+- [Safety and repository boundary](#safety-and-repository-boundary)
+- [Upstream attribution](#upstream-attribution)
+- [License](#license)
+
 ## Quick start
 
 ### Pi
 
 ```sh
 pi install git:github.com/krunaldodiya/software-engineering-handbook
+```
+
+Try without installing:
+
+```sh
+pi -e git:github.com/krunaldodiya/software-engineering-handbook
 ```
 
 ### Oh My Pi
@@ -26,13 +64,37 @@ See [install on other agents](#install-on-other-agents) for Claude App, Claude
 Code, Antigravity, Codex App, Codex CLI, Gemini CLI, Kimi Code CLI, OpenCode,
 and Hermes Agent. Pi and Oh My Pi are in [quick start](#quick-start).
 
-## What it provides
+## Usage
+
+You normally do not need a special command after installation. Ask for the work
+itself:
+
+```text
+Fix this concurrency bug and prove the reproduction no longer fails.
+Review this pull request for correctness and security risks.
+Plan the smallest safe implementation of this API change.
+Simplify this module without changing its observable behavior.
+Investigate this performance regression with a fixed benchmark protocol.
+```
+
+The router classifies risk, reads repository-specific rules, chooses one primary
+chapter, and activates only the smallest compatible expert set. Project and user
+instructions remain authoritative over generic handbook defaults.
+
+For explicit use, ask the agent to “apply the software-engineering handbook” or
+invoke `software-engineering-handbook` through the harness's skill UI or slash
+command.
+
+## Features
 
 - Five portable chapters covering lifecycle governance, architecture and code
   quality, testing and debugging, Git/CI/CD/security, and atomic delivery.
 - Risk tiers from localized reversible work through critical irreversible work.
 - A machine-readable registry containing 8 reviewed providers, 11 capability
   groups, and 90 provider-qualified capabilities.
+- Deduplicated MoE ownership: each provider-qualified original belongs to one
+  capability group; overlapping triggers resolve through explicit roles,
+  conflicts, and budgets instead of loading duplicate experts.
 - Bounded expert adaptations from Superpowers, Ponytail, Addy Osmani's Agent
   Skills, Understand Anything, autoresearch, GitHub Spec Kit, OpenSpec, and
   BMAD Method.
@@ -62,7 +124,7 @@ repository register skill paths but do not inject the full handbook at startup.
 After compaction, agents retain concise decisions and evidence, then re-read
 only authoritative sections that are still needed.
 
-## Why there are different directories
+## Directory roles
 
 They are related, but not duplicates:
 
@@ -76,27 +138,6 @@ They are related, but not duplicates:
 `software-engineering` names the handbook subject. `software-engineering-handbook`
 is the installable skill/package identity. Keeping the book separate from the
 router lets humans browse it normally while agents load only selected sections.
-
-## Usage
-
-You normally do not need a special command after installation. Ask for the work
-itself:
-
-```text
-Fix this concurrency bug and prove the reproduction no longer fails.
-Review this pull request for correctness and security risks.
-Plan the smallest safe implementation of this API change.
-Simplify this module without changing its observable behavior.
-Investigate this performance regression with a fixed benchmark protocol.
-```
-
-The router classifies risk, reads repository-specific rules, chooses one primary
-chapter, and activates only the smallest compatible expert set. Project and user
-instructions remain authoritative over generic handbook defaults.
-
-For explicit use, ask the agent to “apply the software-engineering handbook” or
-invoke `software-engineering-handbook` through the harness's skill UI or slash
-command.
 
 ## Install on other agents
 
@@ -189,18 +230,6 @@ hermes plugins install krunaldodiya/software-engineering-handbook --enable
 Hermes uses the code-free Agent Plugins v1 manifest at `plugin.json`. It
 discovers the portable skill without a startup hook or router-body injection.
 
-### Pi
-
-```sh
-pi install git:github.com/krunaldodiya/software-engineering-handbook
-```
-
-Try without installing:
-
-```sh
-pi -e git:github.com/krunaldodiya/software-engineering-handbook
-```
-
 ## Future harness support
 
 These integrations are intentionally deferred:
@@ -210,7 +239,6 @@ These integrations are intentionally deferred:
 - [ ] Factory Droid
 - [ ] GitHub Copilot CLI
 - [ ] Grok Build CLI
-- [ ] Kimi App
 
 ## Updating
 
