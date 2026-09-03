@@ -1,0 +1,20 @@
+{
+  "name": "software-engineering-handbook",
+  "owner": {
+    "name": "Krunal Dodiya"
+  },
+  "metadata": {
+    "description": "Software Engineering Handbook plugin marketplace"
+  },
+  "plugins": [
+    {
+      "name": "software-engineering-handbook",
+      "description": "Risk-scaled software-engineering guidance with sparse expert routing",
+      "version": "1.2.0",
+      "source": "./",
+      "author": {
+        "name": "Krunal Dodiya"
+      }
+    }
+  ]
+}

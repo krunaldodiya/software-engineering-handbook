@@ -1,0 +1,25 @@
+{
+  "name": "software-engineering-handbook",
+  "version": "1.2.0",
+  "description": "Risk-scaled software-engineering handbook with sparse expert routing",
+  "type": "module",
+  "main": ".opencode/plugins/software-engineering-handbook.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krunaldodiya/software-engineering-handbook.git"
+  },
+  "keywords": [
+    "pi-package",
+    "agent-skills",
+    "software-engineering",
+    "code-review",
+    "testing",
+    "security"
+  ],
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

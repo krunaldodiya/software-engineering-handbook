@@ -52,7 +52,6 @@ record it when material.
 
 ## Evidence
 
-The output is a focused context set, exact citations or source identities, and a
-reconciled decision with explicit unverified assumptions. Context quality is
-confirmed by behavior that uses real project symbols and contracts, not by a
-large token count.
+Output only the repository references needed to support the decision, with
+unresolved assumptions marked. Confirm context quality through behavior that
+uses real project symbols and contracts, not through token count.

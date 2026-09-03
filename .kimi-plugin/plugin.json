@@ -1,0 +1,30 @@
+{
+  "name": "software-engineering-handbook",
+  "version": "1.2.0",
+  "description": "Risk-scaled software-engineering guidance with sparse expert routing.",
+  "author": {
+    "name": "Krunal Dodiya"
+  },
+  "homepage": "https://github.com/krunaldodiya/software-engineering-handbook",
+  "license": "MIT",
+  "keywords": [
+    "software-engineering",
+    "planning",
+    "testing",
+    "debugging",
+    "security"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Software Engineering Handbook",
+    "shortDescription": "Risk-scaled engineering guidance with sparse routing",
+    "longDescription": "Load only the handbook and expert sections required by the current engineering task.",
+    "developerName": "Krunal Dodiya",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/krunaldodiya/software-engineering-handbook"
+  }
+}

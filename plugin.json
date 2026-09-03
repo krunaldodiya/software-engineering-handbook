@@ -1,0 +1,18 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "software-engineering-handbook",
+  "version": "1.2.0",
+  "description": "Risk-scaled software-engineering guidance with sparse expert routing",
+  "author": {
+    "name": "Krunal Dodiya"
+  },
+  "homepage": "https://github.com/krunaldodiya/software-engineering-handbook#readme",
+  "repository": "https://github.com/krunaldodiya/software-engineering-handbook",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "software-engineering",
+    "code-review",
+    "testing"
+  ]
+}

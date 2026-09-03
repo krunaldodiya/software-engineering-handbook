@@ -8,9 +8,34 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import cast
 
-ROOT = Path(__file__).resolve().parent
+MANAGED_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = MANAGED_ROOT.parents[1]
+ROOT = REPO_ROOT / "skills" / "software-engineering-handbook"
 REGISTRY = ROOT / "experts" / "registry.json"
 SKILL = ROOT / "SKILL.md"
+MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
+PACKAGE_VERSION = "1.2.0"
+SUPPORTED_HARNESSES = (
+    "Claude App",
+    "Claude Code",
+    "Antigravity",
+    "Codex App",
+    "Codex CLI",
+    "Gemini CLI",
+    "Kimi Code CLI",
+    "OpenCode",
+    "Hermes Agent",
+    "Pi",
+    "Oh My Pi",
+)
+DEFERRED_HARNESSES = (
+    "Cursor",
+    "Devin CLI",
+    "Factory Droid",
+    "GitHub Copilot CLI",
+    "Grok Build CLI",
+    "Kimi App",
+)
 
 REQUIRED_FIELDS = {
     "adapters",
@@ -595,24 +620,168 @@ def validate_providers(
     return providers, provider_names
 
 
+def load_json_object(path: Path) -> dict[str, object]:
+    raw = json.loads(path.read_text())
+    check(isinstance(raw, dict), f"{path} must contain an object")
+    return cast(dict[str, object], raw)
+
+
+def validate_skill_file(path: Path, *, frontmatter_limit: int, file_limit: int) -> None:
+    content = path.read_bytes()
+    check(content.startswith(b"---\n"), f"{path} frontmatter")
+    frontmatter_end = content.find(b"\n---\n", 4)
+    check(frontmatter_end >= 0, f"{path} frontmatter")
+    check(
+        frontmatter_end + len(b"\n---\n") <= frontmatter_limit,
+        f"{path} startup descriptor byte budget",
+    )
+    check(len(content) <= file_limit, f"{path} byte budget")
+
+
+def single_object(value: object, message: str) -> dict[str, object]:
+    check(isinstance(value, list), message)
+    items = cast(list[object], value)
+    check(len(items) == 1 and isinstance(items[0], dict), message)
+    return cast(dict[str, object], items[0])
+
+
+def validate_package(policy: dict[str, object]) -> None:
+    package = load_json_object(REPO_ROOT / "package.json")
+    check(package.get("name") == "software-engineering-handbook", "package name")
+    check(package.get("version") == PACKAGE_VERSION, "package version")
+    check(package.get("license") == "MIT", "package license")
+    check(
+        package.get("main") == ".opencode/plugins/software-engineering-handbook.js",
+        "package main",
+    )
+    check(package.get("pi") == {"skills": ["./skills"]}, "Pi skill manifest")
+    keywords = package.get("keywords")
+    check(isinstance(keywords, list) and "pi-package" in keywords, "Pi package keyword")
+
+    versioned_manifests = (
+        ".claude-plugin/plugin.json",
+        ".codex-plugin/plugin.json",
+        ".kimi-plugin/plugin.json",
+        "gemini-extension.json",
+    )
+    for relative in versioned_manifests:
+        manifest = load_json_object(REPO_ROOT / relative)
+        check(
+            manifest.get("name") == "software-engineering-handbook",
+            f"{relative} plugin name",
+        )
+        check(manifest.get("version") == PACKAGE_VERSION, f"{relative} version")
+
+    for relative in (
+        ".codex-plugin/plugin.json",
+        ".kimi-plugin/plugin.json",
+    ):
+        manifest = load_json_object(REPO_ROOT / relative)
+        check(manifest.get("skills") == "./skills/", f"{relative} skill path")
+
+    claude_marketplace = load_json_object(
+        REPO_ROOT / ".claude-plugin" / "marketplace.json"
+    )
+    claude_plugin = single_object(
+        claude_marketplace.get("plugins"), "Claude marketplace plugin"
+    )
+    check(
+        claude_plugin.get("name") == "software-engineering-handbook"
+        and claude_plugin.get("version") == PACKAGE_VERSION
+        and claude_plugin.get("source") == "./",
+        "Claude marketplace entry",
+    )
+
+    agent_marketplace = load_json_object(
+        REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
+    )
+    agent_plugin = single_object(
+        agent_marketplace.get("plugins"), "Agent Plugins marketplace plugin"
+    )
+    check(
+        agent_plugin.get("name") == "software-engineering-handbook"
+        and agent_plugin.get("source") == {"source": "url", "url": "./"}
+        and agent_plugin.get("policy")
+        == {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+        "Agent Plugins marketplace entry",
+    )
+
+    portable_manifest = load_json_object(REPO_ROOT / "plugin.json")
+    allowed_portable_fields = {
+        "$schema",
+        "name",
+        "version",
+        "description",
+        "author",
+        "homepage",
+        "repository",
+        "license",
+        "keywords",
+        "extensions",
+    }
+    check(
+        set(portable_manifest) <= allowed_portable_fields,
+        "Agent Plugins manifest fields",
+    )
+    check(
+        portable_manifest.get("$schema")
+        == "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+        "Agent Plugins schema",
+    )
+    check(
+        portable_manifest.get("name") == "software-engineering-handbook"
+        and portable_manifest.get("version") == PACKAGE_VERSION,
+        "Agent Plugins identity",
+    )
+    check(portable_manifest.get("license") == "MIT", "Agent Plugins license")
+
+    validate_skill_file(
+        MANAGED_SKILL,
+        frontmatter_limit=cast(int, policy["startup_payload_max_bytes"]),
+        file_limit=cast(int, policy["startup_payload_max_bytes"]),
+    )
+    canonical_reference = (
+        MANAGED_SKILL.parent / "../../skills/software-engineering-handbook/SKILL.md"
+    ).resolve()
+    check(canonical_reference == SKILL.resolve(), "managed skill target")
+    check(
+        MANAGED_SKILL.read_text().split("---", 2)[1]
+        == SKILL.read_text().split("---", 2)[1],
+        "managed skill descriptor drift",
+    )
+
+    gemini_context = (REPO_ROOT / "GEMINI.md").read_text()
+    check(len(gemini_context.encode()) <= 1024, "Gemini startup context budget")
+    check("@./" not in gemini_context, "Gemini eager body import")
+
+    opencode_adapter = (
+        REPO_ROOT / ".opencode/plugins/software-engineering-handbook.js"
+    ).read_text()
+    check(len(opencode_adapter.encode()) <= 2048, "OpenCode adapter budget")
+    check(
+        "messages.transform" not in opencode_adapter
+        and "readFile" not in opencode_adapter,
+        "OpenCode startup body injection",
+    )
+
+    readme = (REPO_ROOT / "README.md").read_text()
+    for harness in SUPPORTED_HARNESSES:
+        check(f"### {harness}" in readme, f"README install section: {harness}")
+    for harness in DEFERRED_HARNESSES:
+        check(f"- [ ] {harness}" in readme, f"README future task: {harness}")
+
+
 def main() -> None:
     raw_data = json.loads(REGISTRY.read_text())
     check(isinstance(raw_data, dict), "registry root must be an object")
     data = cast(dict[str, object], raw_data)
     policy, budgets = validate_policy(data)
-    skill_bytes = SKILL.read_bytes()
-    check(skill_bytes.startswith(b"---\n"), "skill frontmatter")
-    frontmatter_end = skill_bytes.find(b"\n---\n", 4)
-    check(frontmatter_end >= 0, "skill frontmatter")
-    check(
-        frontmatter_end + len(b"\n---\n")
-        <= cast(int, policy["startup_payload_max_bytes"]),
-        "startup descriptor byte budget",
+    validate_skill_file(
+        SKILL,
+        frontmatter_limit=cast(int, policy["startup_payload_max_bytes"]),
+        file_limit=cast(int, policy["router_index_max_bytes"]),
     )
-    check(
-        len(skill_bytes) <= cast(int, policy["router_index_max_bytes"]),
-        "router index byte budget",
-    )
+    validate_package(policy)
 
     providers, provider_names = validate_providers(data)
 
@@ -952,13 +1121,16 @@ def main() -> None:
         "post-effect failover was accepted",
     )
 
-    repo_root = ROOT.parents[1]
     documents = [
-        repo_root / "README.md",
-        repo_root / "LICENSE",
-        ROOT / "SKILL.md",
-        repo_root / "rules" / "engineering-handbook-enforcement.md",
-        *(repo_root / "handbook" / "software-engineering").glob("*.md"),
+        REPO_ROOT / "README.md",
+        REPO_ROOT / "LICENSE",
+        REPO_ROOT / "GEMINI.md",
+        REPO_ROOT / "package.json",
+        REPO_ROOT / "plugin.json",
+        SKILL,
+        MANAGED_SKILL,
+        REPO_ROOT / "rules" / "engineering-handbook-enforcement.md",
+        *(REPO_ROOT / "handbook" / "software-engineering").glob("*.md"),
         *(ROOT / "experts").glob("*.md"),
     ]
     for path in documents:
@@ -967,8 +1139,9 @@ def main() -> None:
     originals = sum(len(skills) for skills in covered.values())
     print(
         f"PASS: {len(providers)} providers, {len(capabilities)} capability groups, "
-        f"{originals} original capabilities, descriptor schema, sparse routing, "
-        "pressure, effects, and failover"
+        f"{originals} original capabilities, {len(SUPPORTED_HARNESSES)} harnesses, "
+        "descriptor schema, sparse routing, context budgets, pressure, effects, "
+        "and failover"
     )
 
 

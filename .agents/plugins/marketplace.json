@@ -1,0 +1,20 @@
+{
+  "name": "software-engineering-handbook",
+  "interface": {
+    "displayName": "Software Engineering Handbook"
+  },
+  "plugins": [
+    {
+      "name": "software-engineering-handbook",
+      "source": {
+        "source": "url",
+        "url": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -70,6 +70,14 @@ software-development workflow expert.
   coordinated agents, recovery ledgers, and procedure validation. The provider
   meta-router is not adopted.
 
+- **obra, _Superpowers_ cross-harness package surfaces — commit
+  `b36e0829c6d0140e93cfef2ca599b1b07d4a7797`, accessed 2026-09-03.**
+  [Versioned source](https://github.com/obra/superpowers/tree/b36e0829c6d0140e93cfef2ca599b1b07d4a7797).
+  Used only as a compatibility reference for current harness manifest locations
+  and install entry points. The handbook package does not adopt its startup
+  body-injection hooks; adapters register the small discovery entry point and
+  preserve on-demand loading.
+
 | Superpowers capability | Handbook fallback |
 |---|---|
 | `using-superpowers` | Main skill router and README applicable-procedure preflight; original meta-router prohibited |
@@ -259,8 +267,8 @@ without turning non-blocking improvements into blockers.
 
 ### Original-preference and fallback contract
 
-`managed-skills/software-engineering-handbook/experts/registry.json` is the
-canonical machine-readable catalog. `experts/resolution.md` defines selection.
+`skills/software-engineering-handbook/experts/registry.json` is the canonical
+machine-readable catalog. `experts/resolution.md` defines selection.
 
 1. Discover availability from host-registered descriptors only; do not search
    the network or filesystem.
@@ -281,8 +289,8 @@ canonical machine-readable catalog. `experts/resolution.md` defines selection.
 ### Package organization and extension
 
 Portable capabilities are separated by responsibility under
-`managed-skills/software-engineering-handbook/experts/`. The compact main skill
-contains only the fast routing index; modules load progressively.
+`skills/software-engineering-handbook/experts/`. The compact main skill contains
+only the fast routing index; modules load progressively.
 
 New providers use the same stable path: pin and review the source, gap-map each
 capability, reject duplicate routers and non-workflow surfaces, add or reuse one
