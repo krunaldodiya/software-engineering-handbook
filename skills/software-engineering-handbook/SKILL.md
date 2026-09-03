@@ -49,6 +49,7 @@ compact index and load only the selected module or trusted original skill:
 | multi-slice agile planning, readiness, course correction, status, walkthrough, or retrospective | the selected section of `experts/adaptive-agile.md` |
 | unfamiliar context, external API facts, or high-consequence uncertainty | `experts/context-sources.md` |
 | context degradation, compression/handoff, recurring harness overhead, or token/model/agent cost | the selected section of `experts/context-economics.md` |
+| explicit procedure/skill improvement; or causally attributed procedure defect evidenced by repeated or material failure/near miss, sustained blockage, or measured recurring cost; exclude unresolved higher-authority conflict and authority/evidence-bypass requests | trusted `superpowers/writing-skills` when available; otherwise `experts/procedure-improvement.md` |
 | public interface, API, frontend, interaction, or accessibility | `experts/interfaces-ui.md` |
 | implementation, test, browser, review, security, performance, CI/CD, migration, observability, or launch | the selected section of `experts/quality-operations.md` |
 | large/unfamiliar codebase map, architecture orientation, or impact analysis | `experts/code-comprehension.md` |

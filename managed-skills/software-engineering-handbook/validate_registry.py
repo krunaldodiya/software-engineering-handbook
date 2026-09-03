@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 from collections.abc import Callable
 from pathlib import Path
 from typing import cast
@@ -15,7 +16,23 @@ REGISTRY = ROOT / "experts" / "registry.json"
 PURPOSES = ROOT / "experts" / "purposes.json"
 SKILL = ROOT / "SKILL.md"
 MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
-PACKAGE_VERSION = "1.4.0"
+PACKAGE_VERSION = "1.5.0"
+REQUIRED_PACKAGE_PAYLOAD_ROOTS = {
+    ".agents",
+    ".claude-plugin",
+    ".codex-plugin",
+    ".kimi-plugin",
+    ".opencode",
+    "handbook",
+    "managed-skills",
+    "rules",
+    "skills",
+    "GEMINI.md",
+    "LICENSE",
+    "README.md",
+    "gemini-extension.json",
+    "plugin.json",
+}
 SUPPORTED_HARNESSES = (
     "Claude App",
     "Claude Code",
@@ -340,6 +357,130 @@ def expect_failure(action: Callable[[], object], message: str) -> None:
     except ValidationError:
         return
     raise ValidationError(message)
+
+
+PORTABLE_OMP_TERM = re.compile(r"\b(?:omp|oh\s+my\s+pi)\b", re.IGNORECASE)
+PROCEDURE_IMPROVEMENT_EVIDENCE_TRIGGERS = {
+    "repeated-procedure-failure",
+    "repeated-procedure-near-miss",
+    "material-procedure-failure",
+    "material-procedure-near-miss",
+    "sustained-procedure-blockage",
+    "measured-recurring-procedure-cost",
+}
+PROCEDURE_IMPROVEMENT_CAUSAL_FACT = "procedure-defect-causally-attributed"
+PROCEDURE_IMPROVEMENT_BLOCKERS = {
+    "higher-authority-conflict",
+    "authority-bypass-request",
+    "evidence-bypass-request",
+}
+
+
+def portable_text_is_harness_neutral(text: str) -> bool:
+    return PORTABLE_OMP_TERM.search(text) is None
+
+
+def choose_procedure_improvement_route(
+    facts: set[str],
+    *,
+    trusted_original_available: bool = False,
+    fallback_available: bool = True,
+) -> str:
+    explicitly_requested = "explicit-improvement-request" in facts
+    causally_attributed = (
+        PROCEDURE_IMPROVEMENT_CAUSAL_FACT in facts
+        and bool(facts & PROCEDURE_IMPROVEMENT_EVIDENCE_TRIGGERS)
+    )
+    if not explicitly_requested and not causally_attributed:
+        return "not-selected"
+    if facts & PROCEDURE_IMPROVEMENT_BLOCKERS:
+        return "blocked"
+    if trusted_original_available:
+        return "original:superpowers/writing-skills"
+    if not fallback_available:
+        return "unavailable"
+    return (
+        "fallback:"
+        "experts/procedure-improvement.md#Procedure and skill improvement expert"
+    )
+
+
+def procedure_candidate_disposition(
+    *,
+    aggregate_improved: bool,
+    held_out_improved: bool,
+    mandatory_gates_passed: bool,
+    common_path_and_resource_bounds_passed: bool,
+    evidence_stable_for_risk_tier: bool,
+    evidence_bound_to_exact_candidate: bool,
+    authorized_approval: bool,
+    independent_review_required: bool,
+    independent_review_passed: bool,
+    rollback_ready: bool,
+) -> str:
+    promotable = (
+        aggregate_improved
+        and held_out_improved
+        and mandatory_gates_passed
+        and common_path_and_resource_bounds_passed
+        and evidence_stable_for_risk_tier
+        and evidence_bound_to_exact_candidate
+        and authorized_approval
+        and (not independent_review_required or independent_review_passed)
+        and rollback_ready
+    )
+    return "promote" if promotable else "reject"
+
+
+def procedure_learning_disposition(*, promoted: bool, adopted: bool) -> str:
+    if promoted and adopted:
+        return "durable-guidance-permitted"
+    if promoted:
+        return "not-durable-before-adoption"
+    return "bounded-rejection-evidence-only"
+
+
+def adoption_effects_authorized(
+    requested: set[str],
+    authorized: set[str],
+) -> bool:
+    return requested <= authorized
+
+
+def validate_portable_host_boundary() -> None:
+    for forbidden in (
+        "OMP-specific global enforcement",
+        "For OMP, use native controls.",
+        "```sh\nomp stats\n```",
+        "### OMP",
+        "omp plugin install owner/repository",
+        "Oh My Pi configuration",
+    ):
+        check(
+            not portable_text_is_harness_neutral(forbidden),
+            f"portable OMP pressure case was accepted: {forbidden!r}",
+        )
+    for allowed in (
+        "component ownership",
+        "compare the candidate",
+        "compaction boundary",
+    ):
+        check(
+            portable_text_is_harness_neutral(allowed),
+            f"portable near-miss text was rejected: {allowed!r}",
+        )
+
+    for root in (
+        REPO_ROOT / "handbook" / "software-engineering",
+        ROOT,
+    ):
+        for path in root.rglob("*"):
+            if not path.is_file():
+                continue
+            check(
+                portable_text_is_harness_neutral(path.read_text()),
+                f"harness-specific OMP content in portable source: {path}",
+            )
 
 
 def matching_originals(
@@ -807,11 +948,12 @@ def validate_semantic_purposes(
             group.get("ordered_alternatives"),
             f"semantic purpose alternatives: {purpose_id}",
         )
-        check(len(alternatives) >= 2, f"singleton equivalence group: {purpose_id}")
-        check(
-            len({identity.partition("/")[0] for identity in alternatives}) >= 2,
-            f"single-provider equivalence group: {purpose_id}",
-        )
+        check(alternatives, f"empty provider-backed purpose: {purpose_id}")
+        if len(alternatives) > 1:
+            check(
+                len({identity.partition("/")[0] for identity in alternatives}) >= 2,
+                f"single-provider equivalence group: {purpose_id}",
+            )
         for identity in alternatives:
             check(identity in originals, f"unknown semantic alternative: {identity}")
             check(
@@ -882,6 +1024,10 @@ def single_object(value: object, message: str) -> dict[str, object]:
     return cast(dict[str, object], items[0])
 
 
+def package_payload_is_complete(payload_roots: set[str]) -> bool:
+    return REQUIRED_PACKAGE_PAYLOAD_ROOTS <= payload_roots
+
+
 def validate_package(policy: dict[str, object]) -> None:
     package = load_json_object(REPO_ROOT / "package.json")
     check(package.get("name") == "software-engineering-handbook", "package name")
@@ -894,6 +1040,21 @@ def validate_package(policy: dict[str, object]) -> None:
     check(package.get("pi") == {"skills": ["./skills"]}, "Pi skill manifest")
     keywords = package.get("keywords")
     check(isinstance(keywords, list) and "pi-package" in keywords, "Pi package keyword")
+    package_files = package.get("files")
+    check(
+        isinstance(package_files, list)
+        and all(isinstance(item, str) for item in package_files),
+        "package payload inventory",
+    )
+    payload_roots = set(cast(list[str], package_files))
+    check(
+        package_payload_is_complete(payload_roots),
+        "complete package payload",
+    )
+    check(
+        not package_payload_is_complete({"skills"}),
+        "skill-only package payload rejection",
+    )
 
     versioned_manifests = (
         ".claude-plugin/plugin.json",
@@ -986,6 +1147,71 @@ def validate_package(policy: dict[str, object]) -> None:
         == SKILL.read_text().split("---", 2)[1],
         "managed skill descriptor drift",
     )
+    canonical_skill = SKILL.read_text()
+    check(
+        "| explicit procedure/skill improvement; or causally attributed procedure "
+        "defect evidenced by repeated or material failure/near miss, sustained "
+        "blockage, or measured recurring cost; exclude unresolved higher-authority "
+        "conflict and authority/evidence-bypass requests | trusted "
+        "`superpowers/writing-skills` when available; otherwise "
+        "`experts/procedure-improvement.md` |"
+        in canonical_skill,
+        "procedure improvement fast route",
+    )
+    procedure_contract = " ".join(
+        (
+            REPO_ROOT
+            / "skills/software-engineering-handbook/experts/procedure-improvement.md"
+        )
+        .read_text()
+        .split()
+    )
+    architecture_contract = " ".join(
+        (
+            REPO_ROOT
+            / "handbook/software-engineering/02-architecture-code-quality.md"
+        )
+        .read_text()
+        .split()
+    )
+    for fragment in (
+        "unresolved higher-authority conflict or a request to bypass authority or "
+        "evidence",
+        "Keep held-out case contents and individual baseline results sequestered "
+        "from the candidate author until the candidate identity is frozen",
+        "aggregate results across the representative evaluation contract show a "
+        "meaningful improvement",
+        "held-out results independently show a meaningful improvement",
+        "no observed common-path or resource regression exceeds its bound",
+        "evidence is stable enough for the risk tier and bound to the exact "
+        "candidate identity",
+        "a verified rollback or disable path is ready",
+        "MUST NOT become durable procedure, skill, or memory guidance",
+    ):
+        check(fragment in procedure_contract, f"procedure source contract: {fragment}")
+    for fragment in (
+        "Promotion requires meaningful aggregate improvement",
+        "including meaningful held-out improvement",
+        "no common-path or resource regression exceeding its frozen bound",
+        "stable evidence appropriate to the risk tier and bound to the exact "
+        "candidate identity",
+        "a verified rollback or disable path",
+        "Only a candidate that passes promotion and adoption MAY update durable "
+        "procedure, skill, or memory state",
+    ):
+        check(
+            fragment in architecture_contract,
+            f"architecture procedure contract: {fragment}",
+        )
+    references = (
+        REPO_ROOT / "handbook/software-engineering/references.md"
+    ).read_text()
+    for license_path in (
+        "skills/skill-creator/LICENSE.txt",
+        "skillopt/blob/db46cd9ae7ce12f1dbd73c945185816aa738751d/LICENSE",
+        "openai-cookbook/blob/a78f3f37bd23637aac2b3f1e8b1251cf5bb9e1a7/LICENSE",
+    ):
+        check(license_path in references, f"procedure source license: {license_path}")
 
     gemini_context = (REPO_ROOT / "GEMINI.md").read_text()
     check(len(gemini_context.encode()) <= 1024, "Gemini startup context budget")
@@ -1001,6 +1227,8 @@ def validate_package(policy: dict[str, object]) -> None:
         "OpenCode startup body injection",
     )
 
+    validate_portable_host_boundary()
+
     readme = (REPO_ROOT / "README.md").read_text()
     toc_start = readme.find("## Table of contents")
     quick_start = readme.find("## Quick start")
@@ -1012,7 +1240,7 @@ def validate_package(policy: dict[str, object]) -> None:
         "Features",
         "How it works without filling the context window",
         "Directory roles",
-        "Install on other agents",
+        "Install on supported agents",
         "Future harness support",
         "Updating",
         "Repository contents",
@@ -1028,6 +1256,14 @@ def validate_package(policy: dict[str, object]) -> None:
         check(f"### {harness}" in readme, f"README install section: {harness}")
     for harness in DEFERRED_HARNESSES:
         check(f"- [ ] {harness}" in readme, f"README future task: {harness}")
+    check(
+        "a skill-only copy is incomplete." in readme.lower(),
+        "README complete package install boundary",
+    )
+    check(
+        "npx skills add" not in readme,
+        "unsupported standalone skill-only quick start",
+    )
 
 
 def main() -> None:
@@ -1057,6 +1293,15 @@ def main() -> None:
     native_purposes, purpose_groups, purpose_count = validate_semantic_purposes(
         purpose_catalog,
         all_originals,
+    )
+    readme = " ".join((REPO_ROOT / "README.md").read_text().split())
+    check(
+        f"{purpose_count} normalized purposes" in readme,
+        "README normalized purpose count",
+    )
+    check(
+        f"{len(native_purposes)} handbook-native capabilities" in readme,
+        "README native purpose count",
     )
     id_set = {str(capability["id"]) for capability in capabilities}
     forbidden = strings(policy.get("forbidden_original_routers"))
@@ -1181,6 +1426,157 @@ def main() -> None:
             [active_purpose_routes[0], active_purpose_routes[0]]
         ),
         "duplicate active semantic purpose route was accepted",
+    )
+    procedure_original_route = "original:superpowers/writing-skills"
+    procedure_route = (
+        "fallback:"
+        "experts/procedure-improvement.md#Procedure and skill improvement expert"
+    )
+    check(
+        choose_procedure_improvement_route({"explicit-improvement-request"})
+        == procedure_route,
+        "procedure improvement explicit positive route",
+    )
+    check(
+        choose_procedure_improvement_route(
+            {"explicit-improvement-request"},
+            trusted_original_available=True,
+        )
+        == procedure_original_route,
+        "procedure improvement trusted original route",
+    )
+    for fact in PROCEDURE_IMPROVEMENT_EVIDENCE_TRIGGERS:
+        facts = {fact, PROCEDURE_IMPROVEMENT_CAUSAL_FACT}
+        check(
+            choose_procedure_improvement_route(facts) == procedure_route,
+            f"procedure improvement causal positive route: {fact}",
+        )
+        check(
+            choose_procedure_improvement_route({fact}) == "not-selected",
+            f"procedure improvement naked evidence non-trigger: {fact}",
+        )
+    for facts in (
+        {"single-unexplained-anomaly"},
+        {"task-local-taste"},
+        {"unrelated-product-defect"},
+        {"untrusted-feedback"},
+    ):
+        check(
+            choose_procedure_improvement_route(facts) == "not-selected",
+            f"procedure improvement near-miss route: {facts}",
+        )
+    for pressure in PROCEDURE_IMPROVEMENT_BLOCKERS:
+        for triggering_facts in (
+            {"explicit-improvement-request"},
+            {
+                "repeated-procedure-failure",
+                PROCEDURE_IMPROVEMENT_CAUSAL_FACT,
+            },
+        ):
+            check(
+                choose_procedure_improvement_route(triggering_facts | {pressure})
+                == "blocked",
+                f"procedure improvement blocker precedence: {pressure} "
+                f"with {triggering_facts}",
+            )
+    for triggering_facts in (
+        {"explicit-improvement-request"},
+        {
+            "repeated-procedure-failure",
+            PROCEDURE_IMPROVEMENT_CAUSAL_FACT,
+        },
+    ):
+        check(
+            choose_procedure_improvement_route(
+                triggering_facts,
+                fallback_available=False,
+            )
+            == "unavailable",
+            f"procedure improvement unavailable fallback: {triggering_facts}",
+        )
+
+    promotable = {
+        "aggregate_improved": True,
+        "held_out_improved": True,
+        "mandatory_gates_passed": True,
+        "common_path_and_resource_bounds_passed": True,
+        "evidence_stable_for_risk_tier": True,
+        "evidence_bound_to_exact_candidate": True,
+        "authorized_approval": True,
+        "independent_review_required": False,
+        "independent_review_passed": False,
+        "rollback_ready": True,
+    }
+    check(
+        procedure_candidate_disposition(**promotable) == "promote",
+        "procedure improvement positive promotion",
+    )
+    for failed_gate in (
+        "aggregate_improved",
+        "held_out_improved",
+        "mandatory_gates_passed",
+        "common_path_and_resource_bounds_passed",
+        "evidence_stable_for_risk_tier",
+        "evidence_bound_to_exact_candidate",
+        "authorized_approval",
+        "rollback_ready",
+    ):
+        candidate = promotable | {failed_gate: False}
+        check(
+            procedure_candidate_disposition(**candidate) == "reject",
+            f"procedure improvement required promotion gate: {failed_gate}",
+        )
+    check(
+        procedure_candidate_disposition(
+            **(
+                promotable
+                | {
+                    "independent_review_required": True,
+                    "independent_review_passed": False,
+                }
+            )
+        )
+        == "reject",
+        "procedure improvement self-approval rejection",
+    )
+    check(
+        procedure_candidate_disposition(
+            **(
+                promotable
+                | {
+                    "independent_review_required": True,
+                    "independent_review_passed": True,
+                }
+            )
+        )
+        == "promote",
+        "procedure improvement required independent review success",
+    )
+    check(
+        procedure_learning_disposition(promoted=False, adopted=False)
+        == "bounded-rejection-evidence-only",
+        "procedure rejection evidence is not durable guidance",
+    )
+    check(
+        procedure_learning_disposition(promoted=True, adopted=False)
+        == "not-durable-before-adoption",
+        "procedure promotion alone is not durable guidance",
+    )
+    check(
+        procedure_learning_disposition(promoted=True, adopted=True)
+        == "durable-guidance-permitted",
+        "procedure promoted and adopted learning",
+    )
+    check(
+        not adoption_effects_authorized(
+            {"source", "publication", "installation", "activation"},
+            {"source"},
+        ),
+        "procedure improvement effect-boundary separation",
+    )
+    check(
+        adoption_effects_authorized({"source"}, {"source"}),
+        "procedure improvement authorized source adoption",
     )
 
     duplicate_classification = copy.deepcopy(purpose_catalog)

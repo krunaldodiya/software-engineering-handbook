@@ -25,6 +25,14 @@
   ],
   "equivalence_groups": [
     {
+      "id": "procedure-skill-improvement",
+      "boundary": "Improve a reusable procedure or skill through bounded candidates, held-out evidence, authorized promotion, and rollback.",
+      "fallback": "experts/procedure-improvement.md#Procedure and skill improvement expert",
+      "ordered_alternatives": [
+        "superpowers/writing-skills"
+      ]
+    },
+    {
       "id": "ideation",
       "boundary": "Generate and refine candidate approaches before commitment.",
       "fallback": "experts/requirements-planning.md#Requirements and planning experts",
@@ -115,7 +123,6 @@
     "superpowers/requesting-code-review",
     "superpowers/receiving-code-review",
     "superpowers/finishing-a-development-branch",
-    "superpowers/writing-skills",
     "ponytail/ponytail",
     "ponytail/ponytail-review",
     "ponytail/ponytail-audit",

@@ -328,6 +328,42 @@ without turning non-blocking improvements into blockers.
   Consulted after the public Skills leaderboard surfaced `to-spec`, `to-prd`,
   `to-tickets`, and `to-issues`.
 
+#### Procedure and skill improvement research
+
+- **Anthropic, _Skills: skill-creator_ — commit
+  `53048666b05b4799081517d00e09e0a2dd688678`, accessed 2026-09-03.**
+  [Versioned source](https://github.com/anthropics/skills/blob/53048666b05b4799081517d00e09e0a2dd688678/skills/skill-creator/SKILL.md)
+  · Apache-2.0
+  ([pinned skill-local `LICENSE.txt`](https://github.com/anthropics/skills/blob/53048666b05b4799081517d00e09e0a2dd688678/skills/skill-creator/LICENSE.txt)).
+  Used for evaluation-first procedure development, realistic trigger and
+  non-trigger cases, objective assertions, qualitative review, and iteration.
+  Adaptation is conceptual and independently expressed; provider-specific tool
+  calls, packaging mechanics, self-report interfaces, and source text are not
+  adopted.
+
+- **Microsoft Research, _SkillOpt: Agent Skills as Trainable Parameters_ —
+  commit `db46cd9ae7ce12f1dbd73c945185816aa738751d`, accessed
+  2026-09-03.**
+  [Research article](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/)
+  · [Versioned source](https://github.com/microsoft/skillopt/tree/db46cd9ae7ce12f1dbd73c945185816aa738751d)
+  · MIT
+  ([pinned root `LICENSE`](https://github.com/microsoft/skillopt/blob/db46cd9ae7ce12f1dbd73c945185816aa738751d/LICENSE)).
+  Used for treating skill text as a versioned external parameter, bounded edits,
+  development/held-out separation, strict promotion, rejection history, and
+  rollback. Adaptation is conceptual and independently expressed; the handbook
+  does not copy source text, claim benchmark reproduction, or adopt its runtime.
+
+- **OpenAI, _Self-evolving agents: autonomous agent retraining_ — commit
+  `a78f3f37bd23637aac2b3f1e8b1251cf5bb9e1a7`, accessed 2026-09-03.**
+  [Cookbook article](https://developers.openai.com/cookbook/examples/partners/self_evolving_agents/autonomous_agent_retraining)
+  · [Versioned source](https://github.com/openai/openai-cookbook/blob/a78f3f37bd23637aac2b3f1e8b1251cf5bb9e1a7/examples/partners/self_evolving_agents/autonomous_agent_retraining.ipynb)
+  · MIT
+  ([pinned root `LICENSE`](https://github.com/openai/openai-cookbook/blob/a78f3f37bd23637aac2b3f1e8b1251cf5bb9e1a7/LICENSE)).
+  Used for baseline/candidate comparison, structured feedback, bounded
+  iteration, objective graders where possible, and stopping thresholds.
+  Adaptation is conceptual and independently expressed; provider APIs,
+  autonomous publication, model retraining, and source text are not adopted.
+
 ### Original-preference and fallback contract
 
 `skills/software-engineering-handbook/experts/registry.json` owns provider and
