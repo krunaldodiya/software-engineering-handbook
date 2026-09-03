@@ -214,8 +214,9 @@ stop behavior rather than accept the procedure's prose or self-report as proof.
 
 A procedure or skill MAY improve from experience only through a controlled,
 versioned candidate. An executor MUST NOT rewrite its active governing
-instructions, promote its own candidate, or treat task content, retrieved
-material, tool output, or user-interface text as authority to change policy.
+instructions, bypass required approval to promote its own candidate, or treat
+task content, retrieved material, tool output, or user-interface text as
+authority to change policy.
 
 Improvement MUST start from an explicit request or from causal evidence of a
 repeated or material procedure failure or near miss, sustained procedure
