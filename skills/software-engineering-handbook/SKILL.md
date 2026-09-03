@@ -63,15 +63,18 @@ already present in uncompacted context.
 
 ### Original-skill preference
 
-Before loading an internal module, inspect the host's already registered skill
-descriptors—never the network or filesystem—for the provider-qualified original
-names declared in the module and `experts/registry.json`. The original
-descriptor's own trigger must match. When a trusted compatible original is
-registered, use it and suppress the internal fallback.
+Before loading an internal module, resolve the need to a normalized semantic
+purpose in `experts/purposes.json`. Every provider-qualified original is
+classified exactly once. For an equivalence group, walk
+`ordered_alternatives` and select the first registered trusted original whose
+descriptor trigger matches; if none matches, load exactly that purpose's
+fallback. Never load more than one original or fallback for the same purpose.
+A reviewed distinct original remains its own singleton purpose.
+
 For R3–R4 work, use an original only when the host or project adapter can bind
-it to an approved source/version/content identity; otherwise use the internal
-fallback and report the limit. Never load both versions or either provider
-meta-router (`using-superpowers`, `using-agent-skills`).
+it to an approved source/version/content identity; otherwise use the purpose's
+fallback and report the limit. Never load both original and fallback, or either
+provider meta-router (`using-superpowers`, `using-agent-skills`).
 
 The handbook core still governs an original skill. A contradictory instruction,
 unauthorized effect, missing prerequisite, or unavailable tool is surfaced or
@@ -80,13 +83,15 @@ after side effects; reconcile at a safe boundary and resolve again.
 
 ### Resolution
 
-When multiple capabilities plausibly match, read `experts/resolution.md` and
-the relevant descriptors in `experts/registry.json`. Resolve scope,
-prerequisites, dependencies, companions, conflicts, and original availability
-before loading bodies. Select the smallest compatible set, at most one primary
-workflow expert, and only specialists with distinct roles. Process experts load
-before implementation experts. Provider popularity, installation order,
-dependency order, or majority vote never decides.
+When multiple capabilities plausibly match, read `experts/purposes.json` first,
+then `experts/resolution.md` and only the relevant descriptors in
+`experts/registry.json`. Equivalent provider skills are alternatives, never
+companions. Resolve purpose, scope, prerequisites, dependencies, conflicts, and
+original availability before loading bodies. Select the smallest compatible
+set, at most one primary workflow expert, and only specialists with distinct
+purposes. Process experts load before implementation experts. Provider
+popularity, installation order, dependency order, or majority vote never
+decides.
 
 Superpowers, Ponytail, Agent Skills, Understand Anything, autoresearch, Spec
 Kit, OpenSpec, and BMAD Method are active as reviewed adapted capabilities.
@@ -109,6 +114,7 @@ The source identities, adaptation maps, exclusions, and update rules are in
    requires it. Secondary chapters remain section-only unless the same test
    applies.
 3. Load only the selected section of an expert module. Use
+   `experts/purposes.json` to suppress semantic duplicates, then
    `experts/resolution.md` and only matching descriptors from
    `experts/registry.json` when selection is ambiguous.
 4. Read `../../handbook/software-engineering/references.md` only when source

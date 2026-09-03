@@ -267,20 +267,21 @@ without turning non-blocking improvements into blockers.
 
 ### Original-preference and fallback contract
 
-`skills/software-engineering-handbook/experts/registry.json` is the canonical
-machine-readable catalog. `experts/resolution.md` defines selection.
+`skills/software-engineering-handbook/experts/registry.json` owns provider and
+capability inventory. `experts/purposes.json` classifies all originals into
+deduplicated semantic purposes. `experts/resolution.md` defines selection.
 
 1. Discover availability from host-registered descriptors only; do not search
    the network or filesystem.
-2. Select the smallest compatible set before loading bodies. Default to core
+2. Resolve the task to a semantic purpose before loading bodies. Default to core
    only for a localized low-risk task with no expert trigger.
-3. Prefer a trusted compatible original skill whose provider-qualified identity
-   and own descriptor trigger match the exact capability. For R3–R4 work, its
-   source/version/content identity must satisfy the project adapter's trust
-   policy.
-4. Suppress the internal fallback when the original is selected. If the
-   original is absent, untrusted, incompatible, or unavailable, use the
-   contract-equivalent fallback.
+3. For an equivalence group, prefer the first trusted compatible original in
+   declared order whose provider-qualified identity and descriptor trigger
+   match. For R3–R4 work, its source/version/content identity must satisfy the
+   project adapter's trust policy.
+4. Load at most one original or fallback per purpose. If every alternative is
+   absent, untrusted, incompatible, or unavailable, use the purpose's single
+   fallback.
 5. Never activate an external meta-router or fail over after side effects
    without reconciling at a safe boundary.
 6. Keep the handbook core authoritative. Expert output remains a proposal until
@@ -292,11 +293,13 @@ Portable capabilities are separated by responsibility under
 `skills/software-engineering-handbook/experts/`. The compact main skill contains
 only the fast routing index; modules load progressively.
 
-New providers use the same stable path: pin and review the source, gap-map each
-capability, reject duplicate routers and non-workflow surfaces, add or reuse one
-bounded module, register triggers/exclusions/dependencies/effects/evidence and
-rollback, validate original-present/original-absent/conflict paths, then enable
-without editing every existing expert. Provider updates repeat provenance,
+New providers use the same stable path: pin and review the source; map each
+original to an existing purpose before proposing a demonstrably distinct new
+boundary; reject duplicate routers and non-workflow surfaces; add or reuse one
+bounded module; register triggers/exclusions/dependencies/effects/evidence and
+rollback; validate classification, ordered alternatives, duplicate-route
+rejection, original-present/original-absent/conflict paths, then enable without
+editing every existing expert. Provider updates repeat provenance,
 compatibility, pressure, and exact-byte review.
 
 ## Source and conformance limitations

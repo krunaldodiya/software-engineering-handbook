@@ -3,7 +3,7 @@
 A public, risk-scaled software-engineering handbook and sparse
 mixture-of-experts skill router for humans, teams, and AI coding agents.
 
-**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 90 capabilities · MIT**
+**11 supported harness surfaces · 5 chapters · 8 reviewed providers · 70 normalized purposes · MIT**
 
 > **Context-first:** agents discover a tiny descriptor at startup and load only
 > the handbook and expert sections required by the current task.
@@ -90,11 +90,11 @@ command.
 - Five portable chapters covering lifecycle governance, architecture and code
   quality, testing and debugging, Git/CI/CD/security, and atomic delivery.
 - Risk tiers from localized reversible work through critical irreversible work.
-- A machine-readable registry containing 8 reviewed providers, 11 capability
-  groups, and 90 provider-qualified capabilities.
-- Deduplicated MoE ownership: each provider-qualified original belongs to one
-  capability group; overlapping triggers resolve through explicit roles,
-  conflicts, and budgets instead of loading duplicate experts.
+- A machine-readable registry containing 8 reviewed providers, 11 provider
+  groups, and 90 provider-qualified originals normalized into 70 purposes.
+- Deduplicated MoE routing: each original belongs to exactly one purpose.
+  Equivalent skills are ordered alternatives, so only one original or fallback
+  can load for that purpose.
 - Bounded expert adaptations from Superpowers, Ponytail, Addy Osmani's Agent
   Skills, Understand Anything, autoresearch, GitHub Spec Kit, OpenSpec, and
   BMAD Method.
@@ -276,13 +276,16 @@ python3 -O managed-skills/software-engineering-handbook/validate_registry.py
 For a provider capability change:
 
 1. Pin and review the exact upstream source.
-2. Gap-map it against existing experts.
-3. Reuse an existing module or add one bounded expert module.
-4. Register triggers, exclusions, prerequisites, conflicts, effects, evidence,
+2. Map every original to an existing purpose in `experts/purposes.json`. Add a
+   new purpose only for a demonstrably distinct behavioral boundary.
+3. Gap-map it against existing experts.
+4. Reuse an existing module or add one bounded expert module.
+5. Register triggers, exclusions, prerequisites, conflicts, effects, evidence,
    context budget, and rollback.
-5. Preserve trusted-original preference and internal fallback behavior.
-6. Add pressure checks for presence, absence, conflict, and active-budget paths.
-7. Obtain exact-revision review before publication.
+6. Preserve ordered original preference and the single purpose fallback.
+7. Add pressure checks for classification, duplicate routes, presence, absence,
+   conflict, and active-budget paths.
+8. Obtain exact-revision review before publication.
 
 Do not add another workflow router, whole-catalog loading, hidden installation,
 telemetry, or a capability already covered by a compatible expert.

@@ -12,6 +12,7 @@ MANAGED_ROOT = Path(__file__).resolve().parent
 REPO_ROOT = MANAGED_ROOT.parents[1]
 ROOT = REPO_ROOT / "skills" / "software-engineering-handbook"
 REGISTRY = ROOT / "experts" / "registry.json"
+PURPOSES = ROOT / "experts" / "purposes.json"
 SKILL = ROOT / "SKILL.md"
 MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
 PACKAGE_VERSION = "1.2.0"
@@ -235,6 +236,9 @@ EXPECTED_POLICY_VALUES: dict[str, object] = {
     "allow_duplicate_original_and_fallback": False,
     "load_unselected_bodies": False,
     "selection_mode": "sparse_descriptor_first",
+    "semantic_selection_mode": "one_route_per_purpose",
+    "classify_every_original_once": True,
+    "max_routes_per_semantic_purpose": 1,
     "catalog_growth_expands_active_set": False,
     "provider_qualified_original_identity": True,
     "original_descriptor_trigger_must_match": True,
@@ -543,13 +547,24 @@ def validate_policy(
 ) -> tuple[dict[str, object], dict[str, dict[str, int]]]:
     check(
         set(data)
-        == {"schema_version", "router", "policy", "providers", "capabilities"},
+        == {
+            "schema_version",
+            "router",
+            "semantic_purposes",
+            "policy",
+            "providers",
+            "capabilities",
+        },
         "registry top-level schema",
     )
     schema_version = data.get("schema_version")
     check(
-        type(schema_version) is int and schema_version == 1,
+        type(schema_version) is int and schema_version == 2,
         "registry schema version",
+    )
+    check(
+        data.get("semantic_purposes") == "experts/purposes.json",
+        "semantic purpose catalog path",
     )
     check(data.get("router") == "software-engineering-handbook", "router identity")
 
@@ -654,6 +669,149 @@ def load_json_object(path: Path) -> dict[str, object]:
     raw = json.loads(path.read_text())
     check(isinstance(raw, dict), f"{path} must contain an object")
     return cast(dict[str, object], raw)
+
+
+def ordered_strings(value: object, message: str) -> list[str]:
+    check(isinstance(value, list), message)
+    values = cast(list[object], value)
+    check(
+        all(isinstance(item, str) and bool(item.strip()) for item in values),
+        message,
+    )
+    result = cast(list[str], values)
+    check(len(result) == len(set(result)), message)
+    return result
+
+
+def validate_semantic_purposes(
+    catalog: dict[str, object],
+    originals: set[str],
+) -> tuple[list[dict[str, object]], int]:
+    check(
+        set(catalog)
+        == {
+            "selection_mode",
+            "singleton_purpose",
+            "equivalence_groups",
+            "distinct_originals",
+        },
+        "semantic purpose catalog schema",
+    )
+    check(
+        catalog.get("selection_mode") == "one_route_per_purpose",
+        "semantic purpose selection mode",
+    )
+    check(
+        catalog.get("singleton_purpose") == "provider-qualified original identity",
+        "singleton semantic purpose rule",
+    )
+    raw_groups_value = catalog.get("equivalence_groups")
+    check(isinstance(raw_groups_value, list), "semantic equivalence groups")
+    raw_groups = cast(list[object], raw_groups_value)
+    check(
+        all(isinstance(group, dict) for group in raw_groups),
+        "semantic equivalence group schema",
+    )
+    groups = cast(list[dict[str, object]], raw_groups)
+    purpose_ids: set[str] = set()
+    boundaries: set[str] = set()
+    assigned: set[str] = set()
+    for group in groups:
+        check(
+            set(group) == {"id", "boundary", "fallback", "ordered_alternatives"},
+            "semantic equivalence group fields",
+        )
+        purpose_id_value = group.get("id")
+        boundary_value = group.get("boundary")
+        fallback_value = group.get("fallback")
+        check(
+            isinstance(purpose_id_value, str) and bool(purpose_id_value.strip()),
+            "semantic purpose identity",
+        )
+        purpose_id = cast(str, purpose_id_value)
+        check(
+            purpose_id not in purpose_ids, f"duplicate semantic purpose: {purpose_id}"
+        )
+        purpose_ids.add(purpose_id)
+        check(
+            isinstance(boundary_value, str) and bool(boundary_value.strip()),
+            f"semantic purpose boundary: {purpose_id}",
+        )
+        boundary = cast(str, boundary_value)
+        check(
+            boundary not in boundaries,
+            f"duplicate semantic purpose boundary: {purpose_id}",
+        )
+        boundaries.add(boundary)
+        check(
+            isinstance(fallback_value, str) and bool(fallback_value.strip()),
+            f"semantic purpose fallback: {purpose_id}",
+        )
+        fallback = cast(str, fallback_value)
+        fallback_path = (ROOT / fallback.split("#", 1)[0]).resolve()
+        check(
+            fallback_path.is_relative_to(REPO_ROOT.resolve())
+            and fallback_path.is_file(),
+            f"semantic purpose fallback path: {purpose_id}",
+        )
+        alternatives = ordered_strings(
+            group.get("ordered_alternatives"),
+            f"semantic purpose alternatives: {purpose_id}",
+        )
+        check(len(alternatives) >= 2, f"singleton equivalence group: {purpose_id}")
+        check(
+            len({identity.partition("/")[0] for identity in alternatives}) >= 2,
+            f"single-provider equivalence group: {purpose_id}",
+        )
+        for identity in alternatives:
+            check(identity in originals, f"unknown semantic alternative: {identity}")
+            check(
+                identity not in assigned,
+                f"multiply classified semantic alternative: {identity}",
+            )
+            assigned.add(identity)
+
+    distinct = ordered_strings(
+        catalog.get("distinct_originals"),
+        "distinct semantic originals",
+    )
+    for identity in distinct:
+        check(identity in originals, f"unknown distinct semantic original: {identity}")
+        check(
+            identity not in assigned,
+            f"multiply classified distinct semantic original: {identity}",
+        )
+        assigned.add(identity)
+    check(assigned == originals, "unclassified semantic originals")
+    return groups, len(groups) + len(distinct)
+
+
+def choose_semantic_purpose(
+    group: dict[str, object],
+    matched: set[str],
+    trusted: set[str],
+) -> str:
+    for identity in ordered_strings(
+        group.get("ordered_alternatives"),
+        "semantic purpose alternatives",
+    ):
+        if identity in matched and identity in trusted:
+            return f"original:{identity}"
+    fallback_value = group.get("fallback")
+    check(isinstance(fallback_value, str), "semantic purpose fallback")
+    return f"fallback:{cast(str, fallback_value)}"
+
+
+def validate_active_purpose_routes(routes: list[tuple[str, str]]) -> None:
+    purpose_ids = [purpose_id for purpose_id, _ in routes]
+    check(
+        len(purpose_ids) == len(set(purpose_ids)),
+        "duplicate active semantic purpose route",
+    )
+    check(
+        all(route.startswith(("original:", "fallback:")) for _, route in routes),
+        "invalid semantic purpose route",
+    )
 
 
 def validate_skill_file(path: Path, *, frontmatter_limit: int, file_limit: int) -> None:
@@ -841,6 +999,16 @@ def main() -> None:
     check(isinstance(raw_capabilities, list), "capabilities must be a list")
     capabilities = cast(list[dict[str, object]], raw_capabilities)
     validate_capability_uniqueness(capabilities)
+    all_originals = {
+        identity
+        for capability in capabilities
+        for identity in strings(capability["original_skills"])
+    }
+    purpose_catalog = load_json_object(PURPOSES)
+    purpose_groups, purpose_count = validate_semantic_purposes(
+        purpose_catalog,
+        all_originals,
+    )
     id_set = {str(capability["id"]) for capability in capabilities}
     forbidden = strings(policy.get("forbidden_original_routers"))
     covered: dict[str, set[str]] = {provider: set() for provider in provider_names}
@@ -917,6 +1085,116 @@ def main() -> None:
     expect_failure(
         lambda: validate_capability_uniqueness(duplicate_contract),
         "duplicate capability contract was accepted",
+    )
+    active_purpose_routes: list[tuple[str, str]] = []
+    for group in purpose_groups:
+        purpose_id = cast(str, group["id"])
+        alternatives = ordered_strings(
+            group["ordered_alternatives"],
+            f"semantic purpose alternatives: {purpose_id}",
+        )
+        selected_route = choose_semantic_purpose(
+            group,
+            set(alternatives),
+            set(alternatives),
+        )
+        check(
+            selected_route == f"original:{alternatives[0]}",
+            f"semantic purpose preference order: {purpose_id}",
+        )
+        check(
+            choose_semantic_purpose(group, set(), set())
+            == f"fallback:{group['fallback']}",
+            f"semantic purpose fallback selection: {purpose_id}",
+        )
+        active_purpose_routes.append((purpose_id, selected_route))
+    active_purpose_routes.extend(
+        (identity, f"original:{identity}")
+        for identity in ordered_strings(
+            purpose_catalog["distinct_originals"],
+            "distinct semantic originals",
+        )
+    )
+    check(
+        len(active_purpose_routes) == purpose_count,
+        "active semantic purpose coverage",
+    )
+    validate_active_purpose_routes(active_purpose_routes)
+    expect_failure(
+        lambda: validate_active_purpose_routes(
+            [active_purpose_routes[0], active_purpose_routes[0]]
+        ),
+        "duplicate active semantic purpose route was accepted",
+    )
+
+    duplicate_classification = copy.deepcopy(purpose_catalog)
+    duplicate_groups = cast(
+        list[dict[str, object]],
+        duplicate_classification["equivalence_groups"],
+    )
+    duplicate_distinct = cast(
+        list[object],
+        duplicate_classification["distinct_originals"],
+    )
+    duplicate_distinct.append(
+        ordered_strings(
+            duplicate_groups[0]["ordered_alternatives"],
+            "semantic purpose alternatives",
+        )[0]
+    )
+    expect_failure(
+        lambda: validate_semantic_purposes(
+            duplicate_classification,
+            all_originals,
+        ),
+        "multiply classified semantic original was accepted",
+    )
+
+    unclassified_catalog = copy.deepcopy(purpose_catalog)
+    cast(list[object], unclassified_catalog["distinct_originals"]).pop()
+    expect_failure(
+        lambda: validate_semantic_purposes(
+            unclassified_catalog,
+            all_originals,
+        ),
+        "unclassified semantic original was accepted",
+    )
+
+    duplicate_purpose = copy.deepcopy(purpose_catalog)
+    duplicate_purpose_groups = cast(
+        list[dict[str, object]],
+        duplicate_purpose["equivalence_groups"],
+    )
+    duplicate_purpose_groups[1]["id"] = duplicate_purpose_groups[0]["id"]
+    expect_failure(
+        lambda: validate_semantic_purposes(duplicate_purpose, all_originals),
+        "duplicate semantic purpose identity was accepted",
+    )
+
+    duplicate_boundary = copy.deepcopy(purpose_catalog)
+    duplicate_boundary_groups = cast(
+        list[dict[str, object]],
+        duplicate_boundary["equivalence_groups"],
+    )
+    duplicate_boundary_groups[1]["boundary"] = duplicate_boundary_groups[0]["boundary"]
+    expect_failure(
+        lambda: validate_semantic_purposes(duplicate_boundary, all_originals),
+        "duplicate semantic purpose boundary was accepted",
+    )
+
+    duplicate_alternative = copy.deepcopy(purpose_catalog)
+    duplicate_alternative_groups = cast(
+        list[dict[str, object]],
+        duplicate_alternative["equivalence_groups"],
+    )
+    first_alternatives = cast(
+        list[object],
+        duplicate_alternative_groups[0]["ordered_alternatives"],
+    )
+    first_alternatives.append(first_alternatives[0])
+    expect_failure(
+        lambda: validate_semantic_purposes(duplicate_alternative, all_originals),
+        "duplicate semantic purpose alternative was accepted",
     )
     invalid_schema = copy.deepcopy(data)
     invalid_schema["schema_version"] = 999
@@ -1192,6 +1470,8 @@ def main() -> None:
         REPO_ROOT / "plugin.json",
         SKILL,
         MANAGED_SKILL,
+        REGISTRY,
+        PURPOSES,
         REPO_ROOT / "rules" / "engineering-handbook-enforcement.md",
         *(REPO_ROOT / "handbook" / "software-engineering").glob("*.md"),
         *(ROOT / "experts").glob("*.md"),
@@ -1202,9 +1482,9 @@ def main() -> None:
     originals = sum(len(skills) for skills in covered.values())
     print(
         f"PASS: {len(providers)} providers, {len(capabilities)} capability groups, "
-        f"{originals} original capabilities, {len(SUPPORTED_HARNESSES)} harnesses, "
-        "descriptor schema, sparse routing, context budgets, pressure, effects, "
-        "and failover"
+        f"{originals} original capabilities across {purpose_count} normalized "
+        f"purposes, {len(SUPPORTED_HARNESSES)} harnesses, descriptor schema, "
+        "sparse routing, context budgets, pressure, effects, and failover"
     )
 
 

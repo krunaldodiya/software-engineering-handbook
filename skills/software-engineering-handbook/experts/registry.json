@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "router": "software-engineering-handbook",
+  "semantic_purposes": "experts/purposes.json",
   "policy": {
     "core": "handbook",
     "max_primary_workflow_experts": 1,
@@ -10,6 +11,9 @@
     "allow_duplicate_original_and_fallback": false,
     "load_unselected_bodies": false,
     "selection_mode": "sparse_descriptor_first",
+    "semantic_selection_mode": "one_route_per_purpose",
+    "classify_every_original_once": true,
+    "max_routes_per_semantic_purpose": 1,
     "catalog_growth_expands_active_set": false,
     "provider_qualified_original_identity": true,
     "original_descriptor_trigger_must_match": true,

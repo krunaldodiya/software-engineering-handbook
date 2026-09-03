@@ -1,0 +1,154 @@
+{
+  "selection_mode": "one_route_per_purpose",
+  "singleton_purpose": "provider-qualified original identity",
+  "equivalence_groups": [
+    {
+      "id": "ideation",
+      "boundary": "Generate and refine candidate approaches before commitment.",
+      "fallback": "experts/requirements-planning.md#Requirements and planning experts",
+      "ordered_alternatives": [
+        "agent-skills/idea-refine",
+        "superpowers/brainstorming",
+        "openspec/openspec-explore",
+        "bmad-method/bmad-brainstorming"
+      ]
+    },
+    {
+      "id": "planning-decomposition",
+      "boundary": "Turn an accepted outcome into an ordered implementation plan and bounded work items.",
+      "fallback": "experts/requirements-planning.md#Requirements and planning experts",
+      "ordered_alternatives": [
+        "agent-skills/planning-and-task-breakdown",
+        "superpowers/writing-plans",
+        "spec-kit/speckit-plan",
+        "spec-kit/speckit-tasks",
+        "bmad-method/bmad-create-epics-and-stories",
+        "bmad-method/bmad-sprint-planning"
+      ]
+    },
+    {
+      "id": "implementation-execution",
+      "boundary": "Execute an accepted plan incrementally without changing its governing contract.",
+      "fallback": "../../handbook/software-engineering/02-architecture-code-quality.md",
+      "ordered_alternatives": [
+        "agent-skills/incremental-implementation",
+        "superpowers/executing-plans",
+        "superpowers/subagent-driven-development",
+        "spec-kit/speckit-implement",
+        "openspec/openspec-apply",
+        "bmad-method/bmad-build"
+      ]
+    },
+    {
+      "id": "test-driven-development",
+      "boundary": "Drive permanent behavioral changes through a discriminating failing check and red-green-refactor.",
+      "fallback": "../../handbook/software-engineering/03-tdd-testing-debugging.md",
+      "ordered_alternatives": [
+        "agent-skills/test-driven-development",
+        "superpowers/test-driven-development"
+      ]
+    },
+    {
+      "id": "debugging-remediation",
+      "boundary": "Reproduce, isolate, repair, and verify a concrete defect.",
+      "fallback": "experts/quality-operations.md#Debugging and error recovery",
+      "ordered_alternatives": [
+        "superpowers/systematic-debugging",
+        "agent-skills/debugging-and-error-recovery",
+        "spec-kit/speckit-bug-fix"
+      ]
+    },
+    {
+      "id": "completion-verification",
+      "boundary": "Challenge completion claims with evidence from the exact candidate revision.",
+      "fallback": "../../handbook/software-engineering/03-tdd-testing-debugging.md",
+      "ordered_alternatives": [
+        "superpowers/verification-before-completion",
+        "spec-kit/speckit-converge",
+        "openspec/openspec-verify"
+      ]
+    },
+    {
+      "id": "generic-code-review",
+      "boundary": "Review a candidate change for correctness, quality, and actionable defects.",
+      "fallback": "experts/quality-operations.md#Code review and quality",
+      "ordered_alternatives": [
+        "agent-skills/code-review-and-quality",
+        "bmad-method/bmad-code-review"
+      ]
+    },
+    {
+      "id": "bounded-requirements-specification",
+      "boundary": "Write a bounded implementation-ready specification for an accepted change.",
+      "fallback": "experts/spec-delivery.md#Specification and delivery experts",
+      "ordered_alternatives": [
+        "spec-kit/speckit-specify",
+        "bmad-method/bmad-spec"
+      ]
+    }
+  ],
+  "distinct_originals": [
+    "superpowers/using-git-worktrees",
+    "superpowers/dispatching-parallel-agents",
+    "superpowers/requesting-code-review",
+    "superpowers/receiving-code-review",
+    "superpowers/finishing-a-development-branch",
+    "superpowers/writing-skills",
+    "ponytail/ponytail",
+    "ponytail/ponytail-review",
+    "ponytail/ponytail-audit",
+    "ponytail/ponytail-debt",
+    "agent-skills/interview-me",
+    "agent-skills/spec-driven-development",
+    "agent-skills/constraint-driven-development",
+    "agent-skills/context-engineering",
+    "agent-skills/source-driven-development",
+    "agent-skills/doubt-driven-development",
+    "agent-skills/frontend-ui-engineering",
+    "agent-skills/api-and-interface-design",
+    "agent-skills/browser-testing-with-devtools",
+    "agent-skills/code-simplification",
+    "agent-skills/security-and-hardening",
+    "agent-skills/performance-optimization",
+    "agent-skills/git-workflow-and-versioning",
+    "agent-skills/ci-cd-and-automation",
+    "agent-skills/deprecation-and-migration",
+    "agent-skills/documentation-and-adrs",
+    "agent-skills/observability-and-instrumentation",
+    "agent-skills/shipping-and-launch",
+    "understand-anything/understand",
+    "understand-anything/understand-diff",
+    "understand-anything/understand-explain",
+    "understand-anything/understand-onboard",
+    "autoresearch/autoresearch",
+    "spec-kit/speckit-constitution",
+    "spec-kit/speckit-taskstoissues",
+    "spec-kit/speckit-clarify",
+    "spec-kit/speckit-analyze",
+    "spec-kit/speckit-checklist",
+    "spec-kit/speckit-bug-assess",
+    "spec-kit/speckit-bug-test",
+    "spec-kit/speckit-assess-intake",
+    "spec-kit/speckit-assess-research",
+    "spec-kit/speckit-assess-define",
+    "spec-kit/speckit-assess-shape",
+    "spec-kit/speckit-assess-decide",
+    "openspec/openspec-propose",
+    "openspec/openspec-new",
+    "openspec/openspec-continue",
+    "openspec/openspec-ff",
+    "openspec/openspec-archive",
+    "openspec/openspec-bulk-archive",
+    "openspec/openspec-onboard",
+    "bmad-method/bmad-project-context",
+    "bmad-method/bmad-correct-course",
+    "bmad-method/bmad-product-brief",
+    "bmad-method/bmad-prfaq",
+    "bmad-method/bmad-prd",
+    "bmad-method/bmad-ux",
+    "bmad-method/bmad-architecture",
+    "bmad-method/bmad-checkpoint-preview",
+    "bmad-method/bmad-qa-generate-e2e-tests",
+    "bmad-method/bmad-retrospective"
+  ]
+}
