@@ -212,6 +212,16 @@ stop behavior rather than accept the procedure's prose or self-report as proof.
 
 #### Scalable procedure-pack architecture
 
+A scalable procedure pack SHOULD use three context tiers: a tiny discovery
+descriptor, a compact routing index, and a task-local working set. The full
+registry, chapters, provider packs, examples, and inactive expert bodies remain
+cold storage. Startup MUST NOT preload them for possible future use. Resolution
+SHOULD locate only matching descriptors, then load only the applicable
+sections. Across compaction, retain concise decisions, outcomes, and evidence
+rather than copied procedure bodies; re-read authoritative text when needed or
+changed.
+
+
 A growing procedure system SHOULD treat procedures as versioned capability
 modules rather than concatenate whole packs into one prompt. One project or
 environment MUST own the canonical registry and primary routing decision.

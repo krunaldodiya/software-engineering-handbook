@@ -17,6 +17,23 @@ always owns precedence, risk, authority, evidence, and delivery claims. Expert
 modules add bounded technique; they do not form a second methodology or
 provider vote.
 
+### Context hierarchy
+
+Keep the catalog in cold storage, not in the prompt. Startup discovery loads
+only this skill's frontmatter descriptor. When the trigger matches, this file
+is the book-style index. The active working set contains only the applicable
+handbook sections and selected expert sections.
+
+Never preload the full handbook, registry, provider pack, or expert catalog for
+possible future use. When resolution is ambiguous, locate and read only the
+matching registry descriptors. Preserve concise decisions, outcomes, and
+evidence across compaction; re-read authoritative sections only when needed or
+changed. Context consumption MUST remain independent of catalog size and leave
+the large majority of the window for project facts and work.
+
+The validator caps the startup descriptor at 1 KiB and this routing index at
+10 KiB; growth belongs in cold, selectively loaded modules.
+
 ### Fast selection
 
 Do not load all capabilities. For a localized R1 task with no expert trigger,
@@ -79,16 +96,22 @@ effects are not bundled or silently activated.
 The source identities, adaptation maps, exclusions, and update rules are in
 `references.md`.
 
-## Required reading
+## On-demand reading
 
-1. Read `~/.omp/agent/handbook/software-engineering/README.md` first.
-2. Select one primary chapter for the task. Consult targeted sections of another chapter first when the index names an explicit escalator; read an additional full chapter only when the work explicitly crosses that chapter's decision boundary or an R3–R4 failure mode needs its chapter-wide controls:
-   - `~/.omp/agent/handbook/software-engineering/01-lifecycle-governance.md`
-   - `~/.omp/agent/handbook/software-engineering/02-architecture-code-quality.md`
-   - `~/.omp/agent/handbook/software-engineering/03-tdd-testing-debugging.md`
-   - `~/.omp/agent/handbook/software-engineering/04-git-ci-cd-security.md`
-   - `~/.omp/agent/handbook/software-engineering/05-agile-atomic-delivery.md`
-3. Use `~/.omp/agent/handbook/software-engineering/references.md` when expert-source selection materially affects the task, when validating source provenance, or when interpreting an external standard.
+1. Treat this file as the hot routing index. For localized R0–R1 work, do not
+   load another handbook body unless a specific rule or expert trigger requires
+   it.
+2. For R2–R4 work, inspect the chapter map in
+   `~/.omp/agent/handbook/software-engineering/README.md`, select one primary
+   chapter, and load only the relevant sections by default. Read the full
+   chapter only when the task spans it or a chapter-wide R3–R4 failure mode
+   requires it. Secondary chapters remain section-only unless the same test
+   applies.
+3. Load only the selected section of an expert module. Use
+   `experts/resolution.md` and only matching descriptors from
+   `experts/registry.json` when selection is ambiguous.
+4. Read `references.md` only when source selection, provenance, or an external
+   standard materially affects the task.
 
 ## Operating sequence
 

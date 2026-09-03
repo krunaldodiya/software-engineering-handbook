@@ -55,7 +55,13 @@ Risk controls MUST be cumulative unless a documented exception says otherwise. C
 
 ## Chapter selection
 
-This index MUST be read first. Read it with one primary chapter by default, chosen for the central decision the work makes. A secondary chapter SHOULD be consulted first at the section level for the explicit escalators below; an additional full chapter is required only when the work explicitly crosses that chapter's decision boundary or an R3–R4 failure mode needs its chapter-wide controls. A chapter SHOULD NOT be loaded merely because the work is non-trivial or to add ceremony.
+This index MUST be consulted first. Use it as a map rather than loading the
+handbook corpus: inspect the selected primary chapter's headings and read only
+the sections governing the current decision by default. Read the full primary
+chapter only when the task spans it or an R3–R4 failure mode requires
+chapter-wide controls. Secondary chapters remain section-level unless that same
+test is met. A chapter or section SHOULD NOT be loaded merely because the work
+is non-trivial or to add ceremony.
 
 | Chapter | Choose as primary when the central work involves | Owns | Does not own |
 |---|---|---|---|

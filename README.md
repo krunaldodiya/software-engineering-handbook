@@ -22,8 +22,10 @@ whose exact triggers and current risks require them.
   router uses the bounded internal fallback.
 - Unselected bodies, duplicate provider routers, installers, hooks, persistent
   services, and unauthorized side effects stay inactive.
-- Risk-scaled expert and context budgets keep task latency and context cost
-  tied to the work, not to catalog size.
+- Startup exposes only a frontmatter descriptor capped at 1 KiB; the matched
+  routing index is capped at 10 KiB. Chapters, registry entries, and expert
+  sections remain cold until selected, so catalog growth does not consume the
+  task's context window.
 
 Current reviewed capability families adapt useful engineering workflows from
 Superpowers, Ponytail, Addy Osmani's Agent Skills, Understand Anything,

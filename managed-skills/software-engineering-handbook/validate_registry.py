@@ -10,6 +10,7 @@ from typing import cast
 
 ROOT = Path(__file__).resolve().parent
 REGISTRY = ROOT / "experts" / "registry.json"
+SKILL = ROOT / "SKILL.md"
 
 REQUIRED_FIELDS = {
     "adapters",
@@ -213,6 +214,12 @@ EXPECTED_POLICY_VALUES: dict[str, object] = {
     "catalog_growth_expands_active_set": False,
     "provider_qualified_original_identity": True,
     "original_descriptor_trigger_must_match": True,
+    "startup_payload": "frontmatter_descriptor_only",
+    "startup_payload_max_bytes": 1024,
+    "router_index_max_bytes": 10240,
+    "registry_scan_mode": "selected_descriptors_only",
+    "chapter_load_mode": "relevant_sections_first",
+    "retain_inactive_detail": False,
 }
 
 EXPECTED_FORBIDDEN_ROUTERS = {
@@ -593,6 +600,19 @@ def main() -> None:
     check(isinstance(raw_data, dict), "registry root must be an object")
     data = cast(dict[str, object], raw_data)
     policy, budgets = validate_policy(data)
+    skill_bytes = SKILL.read_bytes()
+    check(skill_bytes.startswith(b"---\n"), "skill frontmatter")
+    frontmatter_end = skill_bytes.find(b"\n---\n", 4)
+    check(frontmatter_end >= 0, "skill frontmatter")
+    check(
+        frontmatter_end + len(b"\n---\n")
+        <= cast(int, policy["startup_payload_max_bytes"]),
+        "startup descriptor byte budget",
+    )
+    check(
+        len(skill_bytes) <= cast(int, policy["router_index_max_bytes"]),
+        "router index byte budget",
+    )
 
     providers, provider_names = validate_providers(data)
 
@@ -710,6 +730,14 @@ def main() -> None:
     expect_failure(
         lambda: validate_policy(invalid_fallback),
         "disabled absent-original fallback was accepted",
+    )
+    invalid_startup_payload = copy.deepcopy(data)
+    cast(dict[str, object], invalid_startup_payload["policy"])["startup_payload"] = (
+        "whole_skill"
+    )
+    expect_failure(
+        lambda: validate_policy(invalid_startup_payload),
+        "whole-skill startup payload was accepted",
     )
     invalid_r3 = copy.deepcopy(data)
     invalid_r3_policy = cast(dict[str, object], invalid_r3["policy"])

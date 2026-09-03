@@ -13,6 +13,12 @@
     "catalog_growth_expands_active_set": false,
     "provider_qualified_original_identity": true,
     "original_descriptor_trigger_must_match": true,
+    "startup_payload": "frontmatter_descriptor_only",
+    "startup_payload_max_bytes": 1024,
+    "router_index_max_bytes": 10240,
+    "registry_scan_mode": "selected_descriptors_only",
+    "chapter_load_mode": "relevant_sections_first",
+    "retain_inactive_detail": false,
     "default_budgets": {
       "R0": {"primary": 0, "specialists": 0, "evaluator": 0},
       "R1": {"primary": 0, "specialists": 1, "evaluator": 0},
