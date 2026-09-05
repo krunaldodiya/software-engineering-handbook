@@ -13,6 +13,9 @@ mixture-of-experts skill router for humans, teams, and AI coding agents.
 - [Quick start](#quick-start)
 - [Usage](#usage)
 - [Features](#features)
+  - [Engineering coverage](#engineering-coverage)
+  - [Complete capability inventory](#complete-capability-inventory)
+  - [Routing and package utilities](#routing-and-package-utilities)
 - [How it works without filling the context window](#how-it-works-without-filling-the-context-window)
 - [Directory roles](#directory-roles)
 - [Install on supported agents](#install-on-supported-agents)
@@ -105,6 +108,238 @@ command.
 This is guidance and routing—not an autonomous deployment system. It does not
 silently install dependencies, run hooks, publish, release, deploy, access
 secrets, or grant itself authority.
+
+### Engineering coverage
+
+The handbook covers the software lifecycle, not just code generation. These
+chapter summaries describe guidance and controls, not automatically executed
+services:
+
+| Chapter | Features and responsibilities |
+|---|---|
+| [Lifecycle and governance](handbook/software-engineering/01-lifecycle-governance.md) | Scope, stakeholders, requirements, ownership, decision authority, traceability, change control, operation, deprecation, and retirement |
+| [Architecture and code quality](handbook/software-engineering/02-architecture-code-quality.md) | Boundaries, contracts, data and error models, dependency choices, reliability, resource behavior, performance, maintainability, and implementation discipline |
+| [TDD, testing, and debugging](handbook/software-engineering/03-tdd-testing-debugging.md) | Test strategy, red–green–refactor, discriminating reproductions, root-cause investigation, deterministic verification, regression prevention, and completion evidence |
+| [Git, CI/CD, and security](handbook/software-engineering/04-git-ci-cd-security.md) | Coherent commits, protected integration, exact-revision review, CI gates, secrets, supply-chain controls, artifact provenance, authorized release, recovery, and vulnerability response |
+| [Agile atomic delivery](handbook/software-engineering/05-agile-atomic-delivery.md) | Usable vertical slices, sequencing, bounded work, coordination, feedback, Definition of Done, and evidence-bearing handoff without mandating a sprint length or tracker |
+
+### Complete capability inventory
+
+The inventory below covers **all 90 registered provider-qualified originals**
+and **all 4 handbook-native capabilities**. They resolve to **74 normalized
+purposes: 9 shared-purpose groups, 61 distinct originals, and 4 native purposes**.
+Counts describe routing identities, not 94 independent workflows to run together.
+
+The [capability registry](skills/software-engineering-handbook/experts/registry.json)
+owns descriptors and provider mappings; the
+[purpose catalog](skills/software-engineering-handbook/experts/purposes.json)
+owns normalization and alternative ordering. This README is a browsing index,
+not a second routing policy. Capability identifiers are lookup names, not
+promises that a host exposes matching slash commands.
+
+#### Handbook-native capabilities
+
+All four are included in the
+[context-economics module](skills/software-engineering-handbook/experts/context-economics.md):
+
+| Purpose | Capability |
+|---|---|
+| `context-degradation-diagnosis` | Diagnose lost, poisoned, distracting, confused, or conflicting context before choosing a mitigation |
+| `context-compression-continuity` | Compact or hand off long-running work while preserving exact task state and recoverability |
+| `harness-context-audit` | Audit recurring instruction, skill, tool, memory, and history overhead before authorized cleanup |
+| `context-usage-economics` | Reduce context, token, model, tool, and agent cost without weakening task success or evidence |
+
+#### Shared purposes
+
+These nine groups normalize overlapping originals. The router uses the first
+matching trusted original in the catalog's declared order, or the one complete
+internal fallback; it does not combine equivalent workflows.
+
+| Purpose | Capability |
+|---|---|
+| `procedure-skill-improvement` | Improve reusable procedures through bounded candidates, held-out evaluation, authorized promotion, and rollback |
+| `ideation` | Generate and refine candidate approaches before commitment |
+| `planning-decomposition` | Turn an accepted outcome into an ordered plan and bounded work items |
+| `implementation-execution` | Execute an accepted plan incrementally without changing its governing contract |
+| `test-driven-development` | Drive permanent behavior changes through a discriminating failing check and red–green–refactor |
+| `debugging-remediation` | Reproduce, isolate, repair, and verify a concrete defect |
+| `completion-verification` | Challenge completion claims with evidence from the exact candidate revision |
+| `generic-code-review` | Review a candidate for correctness, quality, and actionable defects |
+| `bounded-requirements-specification` | Write a bounded, implementation-ready specification for an accepted change |
+
+#### Provider capability families
+
+Every family has an included bounded adaptation or mapped handbook fallback.
+Compatible upstream originals are optional, trust-checked alternatives—not
+bundled upstream runtimes, installers, hooks, or an endorsement of every feature
+in the upstream project.
+
+| Family | Included capability coverage | Original mappings |
+|---|---|---|
+| [Superpowers inner loop](handbook/software-engineering/references.md) | Brainstorming, isolated workspaces, planning and execution, bounded agent coordination, TDD, debugging, verification, review requests and feedback, branch completion, and procedure improvement | 13 |
+| [Ponytail simplicity](skills/software-engineering-handbook/experts/ponytail-simplicity.md) | Comprehension-first minimal implementation, over-engineering review, broader simplicity audit, and shortcut-debt reporting | 4 |
+| [Agent Skills: requirements and planning](skills/software-engineering-handbook/experts/requirements-planning.md) | Consequential clarification, idea refinement, specification, constraint-first design, and task decomposition | 5 |
+| [Agent Skills: context and sources](skills/software-engineering-handbook/experts/context-sources.md) | Focused context acquisition, primary-source grounding, and doubt-driven challenge | 3 |
+| [Agent Skills: interfaces and UI](skills/software-engineering-handbook/experts/interfaces-ui.md) | Frontend and user-facing behavior, plus public API and module contracts | 2 |
+| [Agent Skills: quality and operations](skills/software-engineering-handbook/experts/quality-operations.md) | Incremental implementation, TDD, browser verification, debugging, review, simplification, security, performance, Git/versioning, CI/CD, migrations, documentation/ADRs, observability, and launch | 14 |
+| [Understand Anything](skills/software-engineering-handbook/experts/code-comprehension.md) | Task-scoped codebase mapping, architecture orientation, diff impact, explanations, and onboarding | 4 |
+| [autoresearch](skills/software-engineering-handbook/experts/empirical-optimization.md) | Finite empirical optimization under an owner-approved frozen protocol | 1 |
+| [Spec Kit](skills/software-engineering-handbook/experts/spec-delivery.md) | Durable specification chains, plans/tasks, issue conversion, implementation convergence, clarification, consistency analysis, checklists, bug assessment/repair/tests, and staged opportunity assessment | 18 |
+| [OpenSpec](skills/software-engineering-handbook/experts/spec-delivery.md) | Brownfield exploration, proposals and change packets, staged or fast-forward artifact preparation, implementation, verification, provenance-retaining archive, and onboarding | 10 |
+| [BMAD Method](skills/software-engineering-handbook/experts/adaptive-agile.md) | Project context, bounded build/spec flows, course correction, brainstorming, product briefs/PRFAQs/PRDs, UX, architecture, epics/stories, sprint planning, review, checkpoint previews, end-to-end test design, and retrospectives | 16 |
+
+<details>
+<summary>All 90 registered original identifiers, grouped by capability family</summary>
+
+These are the complete registered mappings, including aliases belonging to the
+shared purposes above. Consult the registry and source register for exact
+triggers, exclusions, source identities, effects, and fallback boundaries.
+
+**Superpowers inner loop (13)**
+
+- `superpowers/brainstorming`
+- `superpowers/using-git-worktrees`
+- `superpowers/writing-plans`
+- `superpowers/executing-plans`
+- `superpowers/subagent-driven-development`
+- `superpowers/dispatching-parallel-agents`
+- `superpowers/test-driven-development`
+- `superpowers/systematic-debugging`
+- `superpowers/verification-before-completion`
+- `superpowers/requesting-code-review`
+- `superpowers/receiving-code-review`
+- `superpowers/finishing-a-development-branch`
+- `superpowers/writing-skills`
+
+**Ponytail simplicity (4)**
+
+- `ponytail/ponytail`
+- `ponytail/ponytail-review`
+- `ponytail/ponytail-audit`
+- `ponytail/ponytail-debt`
+
+**Agent Skills: requirements and planning (5)**
+
+- `agent-skills/interview-me`
+- `agent-skills/idea-refine`
+- `agent-skills/spec-driven-development`
+- `agent-skills/constraint-driven-development`
+- `agent-skills/planning-and-task-breakdown`
+
+**Agent Skills: context and sources (3)**
+
+- `agent-skills/context-engineering`
+- `agent-skills/source-driven-development`
+- `agent-skills/doubt-driven-development`
+
+**Agent Skills: interfaces and UI (2)**
+
+- `agent-skills/frontend-ui-engineering`
+- `agent-skills/api-and-interface-design`
+
+**Agent Skills: quality and operations (14)**
+
+- `agent-skills/incremental-implementation`
+- `agent-skills/test-driven-development`
+- `agent-skills/browser-testing-with-devtools`
+- `agent-skills/debugging-and-error-recovery`
+- `agent-skills/code-review-and-quality`
+- `agent-skills/code-simplification`
+- `agent-skills/security-and-hardening`
+- `agent-skills/performance-optimization`
+- `agent-skills/git-workflow-and-versioning`
+- `agent-skills/ci-cd-and-automation`
+- `agent-skills/deprecation-and-migration`
+- `agent-skills/documentation-and-adrs`
+- `agent-skills/observability-and-instrumentation`
+- `agent-skills/shipping-and-launch`
+
+**Understand Anything (4)**
+
+- `understand-anything/understand`
+- `understand-anything/understand-diff`
+- `understand-anything/understand-explain`
+- `understand-anything/understand-onboard`
+
+**autoresearch (1)**
+
+- `autoresearch/autoresearch`
+
+**Spec Kit (18)**
+
+- `spec-kit/speckit-constitution`
+- `spec-kit/speckit-specify`
+- `spec-kit/speckit-plan`
+- `spec-kit/speckit-tasks`
+- `spec-kit/speckit-taskstoissues`
+- `spec-kit/speckit-implement`
+- `spec-kit/speckit-converge`
+- `spec-kit/speckit-clarify`
+- `spec-kit/speckit-analyze`
+- `spec-kit/speckit-checklist`
+- `spec-kit/speckit-bug-assess`
+- `spec-kit/speckit-bug-fix`
+- `spec-kit/speckit-bug-test`
+- `spec-kit/speckit-assess-intake`
+- `spec-kit/speckit-assess-research`
+- `spec-kit/speckit-assess-define`
+- `spec-kit/speckit-assess-shape`
+- `spec-kit/speckit-assess-decide`
+
+**OpenSpec (10)**
+
+- `openspec/openspec-explore`
+- `openspec/openspec-propose`
+- `openspec/openspec-new`
+- `openspec/openspec-continue`
+- `openspec/openspec-ff`
+- `openspec/openspec-apply`
+- `openspec/openspec-verify`
+- `openspec/openspec-archive`
+- `openspec/openspec-bulk-archive`
+- `openspec/openspec-onboard`
+
+**BMAD Method (16)**
+
+- `bmad-method/bmad-project-context`
+- `bmad-method/bmad-build`
+- `bmad-method/bmad-spec`
+- `bmad-method/bmad-correct-course`
+- `bmad-method/bmad-brainstorming`
+- `bmad-method/bmad-product-brief`
+- `bmad-method/bmad-prfaq`
+- `bmad-method/bmad-prd`
+- `bmad-method/bmad-ux`
+- `bmad-method/bmad-architecture`
+- `bmad-method/bmad-create-epics-and-stories`
+- `bmad-method/bmad-sprint-planning`
+- `bmad-method/bmad-code-review`
+- `bmad-method/bmad-checkpoint-preview`
+- `bmad-method/bmad-qa-generate-e2e-tests`
+- `bmad-method/bmad-retrospective`
+
+</details>
+
+### Routing and package utilities
+
+- **Sparse selection:** risk-scaled expert budgets, one primary workflow expert,
+  and at most one original or fallback for each purpose.
+- **Complete route contracts:** triggers and near-miss exclusions, prerequisites,
+  required dependency closure, conflicts and ordering, source/trust identity,
+  permitted effects, evidence, failure behavior, and rollback.
+- **Bounded descriptor lookup:** an optional standard-library Python CLI accepts
+  a purpose or provider-qualified original, works from any directory, and
+  reports invalid inputs explicitly without selecting or activating a provider.
+- **Catalog maintenance:** included validation utilities cover registry/schema
+  consistency, mapping completeness, sparse routing, context budgets, pressure,
+  effects, and failover; behavioral checks cover the descriptor query.
+- **Portable packaging:** [11 documented harness surfaces](#install-on-supported-agents),
+  small discovery adapters, complete internal fallbacks, immutable-ref
+  installation where supported, and source/version verification guidance.
+- **Explicit limits:** no bundled upstream provider runtimes, hidden telemetry,
+  autonomous publishing/deployment, universal fixed test-coverage threshold, or
+  unmeasured quality, token-cost, or performance guarantee. Source-specific
+  exclusions remain in the [source register](handbook/software-engineering/references.md).
 
 ## How it works without filling the context window
 
