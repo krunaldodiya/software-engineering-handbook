@@ -85,6 +85,16 @@ These outcomes reflect SLSA’s protected-reference, continuity, human-readable-
 4. Release and deployment decisions MUST use immutable artifact identity, normally a cryptographic digest. Human-readable versions and channels MAY point to that identity but MUST NOT replace it.
 5. A gate that cannot reliably bind results to the accepted revision MUST be redesigned, replaced, or explicitly treated as advisory. Advisory evidence MUST NOT satisfy a required gate.
 
+Evidence reuse is an equivalence claim, not a shortcut around GCS-2. A Git tree
+fingerprint can remain stable across a commit-message-only amendment; tracked
+documentation or code-comment changes alter it. Record the prior and candidate
+identities, changed surface, unaffected evidence, and checks or approvals that
+must be renewed. Bind relevant environment, configuration, dependencies, method,
+and reviewer authority separately; source content alone does not establish them.
+Use approved native identity mechanisms. A temporary Git index can still write
+untracked file contents into the object store, so a fingerprinting helper is not
+necessarily read-only or safe for sensitive untracked material.
+
 ### GCS-4 — Fail-closed CI gates
 
 1. A protected baseline MUST have a small stable set of required checks that can falsify its universal acceptance claims. Additional checks MUST be triggered by changed contracts, risk tier, affected paths, dependency changes, privilege, data, build/release configuration, or other declared risk signals.

@@ -1,6 +1,6 @@
 {
   "name": "software-engineering-handbook",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Risk-scaled software-engineering handbook with sparse expert routing",
   "type": "module",
   "main": ".opencode/plugins/software-engineering-handbook.js",

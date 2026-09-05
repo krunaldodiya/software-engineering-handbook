@@ -123,6 +123,21 @@ repository register skill paths but do not inject the full handbook at startup.
 After compaction, agents retain concise decisions and evidence, then re-read
 only authoritative sections that are still needed.
 
+For ambiguous discovery on hosts that support command execution, an optional
+Python-standard-library query prints one purpose's complete descriptors and
+policy instead of both cold catalogs:
+
+```sh
+python3 managed-skills/software-engineering-handbook/query_experts.py ideation
+```
+
+The script also accepts a provider-qualified original, works by absolute path
+from any directory, preserves ordered alternatives and required dependencies,
+and never loads bodies, selects a route, infers trust, or activates a provider.
+It is not an additional ordinary-task preflight. See the
+[resolution contract](skills/software-engineering-handbook/experts/resolution.md)
+for unavailable-tool behavior.
+
 ## Directory roles
 
 They are related, but not duplicates:
@@ -131,7 +146,7 @@ They are related, but not duplicates:
 |---|---|
 | `handbook/software-engineering/` | The normative, human-readable book—the long-term knowledge layer |
 | `skills/software-engineering-handbook/` | The canonical portable router, expert modules, and registry |
-| `managed-skills/software-engineering-handbook/` | The tiny OMP adapter and repository validator |
+| `managed-skills/software-engineering-handbook/` | Package query/validation utilities and the tiny OMP adapter |
 | `rules/engineering-handbook-enforcement.md` | OMP-specific global enforcement adapter |
 
 `software-engineering` names the handbook subject. `software-engineering-handbook`
@@ -251,6 +266,14 @@ Start a new session after installation. Invoke
 `/skill:software-engineering-handbook` explicitly where skill commands are
 supported.
 
+To update or reinstall a reviewed revision, rerun `omp plugin install` with
+`github:krunaldodiya/software-engineering-handbook#<reviewed-commit-sha>`.
+Uninstalling first is unnecessary. Verify `omp plugin list --json`, the installed
+package identity, and `omp read skill://software-engineering-handbook` in a new
+process; a same-named native skill can shadow a plugin skill. Keep the prior
+reviewed ref for rollback. Reinstallation changes future discovery, not the
+instructions already loaded into an active conversation.
+
 ## Future harness support
 
 These integrations are intentionally deferred:
@@ -273,8 +296,8 @@ when the harness supports immutable references.
   register.
 - `skills/software-engineering-handbook/` — canonical portable router, expert
   modules, and registry.
-- `managed-skills/software-engineering-handbook/` — tiny OMP adapter and
-  repository validator.
+- `managed-skills/software-engineering-handbook/` — package query/validation
+  utilities and the tiny OMP adapter.
 - Harness manifests under `.agents/`, `.claude-plugin/`, `.codex-plugin/`,
   `.kimi-plugin/`, and `.opencode/`, plus root Agent Plugins v1, Gemini, and Pi
   manifests.
@@ -287,6 +310,8 @@ Validate the catalog and context budgets before proposing a change:
 ```sh
 python3 managed-skills/software-engineering-handbook/validate_registry.py
 python3 -O managed-skills/software-engineering-handbook/validate_registry.py
+python3 managed-skills/software-engineering-handbook/test_query_experts.py
+python3 -O managed-skills/software-engineering-handbook/test_query_experts.py
 ```
 
 For a provider capability change:

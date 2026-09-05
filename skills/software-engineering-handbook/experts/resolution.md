@@ -6,8 +6,9 @@ never replace its authority, evidence, or delivery gates.
 
 ## Resolve before loading bodies
 
-1. Read `purposes.json` first, then only the relevant `registry.json`
-   descriptors.
+1. Retrieve the matching `purposes.json` entry and complete owning
+   `registry.json` descriptors, not the whole catalogs. Use host-native filtered
+   reads or the optional query below.
 2. Resolve the task need to a semantic purpose. Each provider original is
    classified exactly once, and each handbook-native purpose declares one
    internal route. Entries in an equivalence group's `ordered_alternatives` are
@@ -21,6 +22,33 @@ never replace its authority, evidence, or delivery gates.
 6. Record purpose ID, capability ID, provider/version, selection reason,
    original or fallback path, unavailable requirements, and conflict
    dispositions when the choice materially affects the result.
+
+### Optional bounded catalog query
+
+When the host can run an already available Python 3 interpreter, the complete
+package includes a read-only helper. From the package root, for example:
+
+```sh
+python3 managed-skills/software-engineering-handbook/query_experts.py ideation
+python3 managed-skills/software-engineering-handbook/query_experts.py superpowers/brainstorming
+```
+
+An absolute script path works from any directory. The query returns only
+descriptors and policy, never expert bodies, a selected route, or a trust
+decision. Group-member queries preserve the entire ordered equivalence group;
+required descriptor dependencies are included, optional companions are not
+activated. Native purposes require no external owner. A distinct original uses
+its owning descriptor's fallback rather than an invented purpose-level fallback.
+Unknown input or incomplete required metadata fails without a partial result.
+
+This helper is optional, not a new startup or low-risk-task preflight. Without
+Python or command execution, use the host's search/section/JSON filtering to
+retrieve the same entries. Do not install a runtime solely for discovery or
+substitute an unqualified original. If bounded extraction is unavailable, use
+the matching already-indexed internal fallback when it meets the current
+contract and report the discovery limit; do not load the whole catalog to work
+around it. Missing host registration or unverifiable trust likewise selects
+the fallback under the rules below, not filesystem or network skill hunting.
 
 ## Prefer a trusted original skill
 

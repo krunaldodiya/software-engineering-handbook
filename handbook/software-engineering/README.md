@@ -1,6 +1,6 @@
 # Software Engineering Handbook
 
-**Handbook version:** 1.5 (2026-09-03)
+**Handbook version:** 1.6 (2026-09-05)
 **Scope:** global, shared, and project-, provider-, tool-, and language-agnostic engineering guidance
 
 ## Purpose
