@@ -268,11 +268,11 @@ supported.
 
 To update or reinstall a reviewed revision, rerun `omp plugin install` with
 `github:krunaldodiya/software-engineering-handbook#<reviewed-commit-sha>`.
-Uninstalling first is unnecessary. Verify `omp plugin list --json`, the installed
-package identity, and `omp read skill://software-engineering-handbook` in a new
-process; a same-named native skill can shadow a plugin skill. Keep the prior
-reviewed ref for rollback. Reinstallation changes future discovery, not the
-instructions already loaded into an active conversation.
+Uninstalling first is unnecessary. Verify `omp plugin list --json` and the
+installed package identity, then have a fresh OMP session read
+`skill://software-engineering-handbook`; a native skill can shadow a plugin
+skill. Keep the prior reviewed ref for rollback. Reinstallation changes future
+discovery, not the instructions already loaded into an active conversation.
 
 ## Future harness support
 
