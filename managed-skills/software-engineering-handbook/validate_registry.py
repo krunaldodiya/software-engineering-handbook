@@ -16,7 +16,7 @@ REGISTRY = ROOT / "experts" / "registry.json"
 PURPOSES = ROOT / "experts" / "purposes.json"
 SKILL = ROOT / "SKILL.md"
 MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
-PACKAGE_VERSION = "1.5.0"
+PACKAGE_VERSION = "1.6.0"
 REQUIRED_PACKAGE_PAYLOAD_ROOTS = {
     ".agents",
     ".claude-plugin",

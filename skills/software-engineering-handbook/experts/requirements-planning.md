@@ -18,6 +18,12 @@ non-goals, acceptance evidence, risks, and unresolved owner decisions. Do not
 continue implementation through consequential ambiguity, but do not turn
 ordinary reversible choices into approval ceremony.
 
+For uncertain product value, challenge the premise using the intended user,
+observed demand or current workaround, and the smallest useful outcome. Compare
+material alternatives against that evidence before adding scope. Use only the
+questions the current uncertainty requires; a fixed interview, alternatives
+count, or product-validation ceremony is not a gate for routine engineering.
+
 ## Specification
 
 Original skill: `spec-driven-development`.

@@ -364,6 +364,21 @@ without turning non-blocking improvements into blockers.
   Adaptation is conceptual and independently expressed; provider APIs,
   autonomous publication, model retraining, and source text are not adopted.
 
+#### Bounded workflow comparison and documentation design
+
+- **Garry Tan, _gstack_ — commit
+  `0d1bd5616c0ef096bb7ccee336f63c60ee408618`, inspected 2026-09-05.**
+  [Pinned source](https://github.com/garrytan/gstack/tree/0d1bd5616c0ef096bb7ccee336f63c60ee408618).
+  Consulted for optional premise challenges, tracker trust framing, and the
+  limits of content fingerprints and audit receipts. Concepts are independently
+  expressed within existing handbook purposes. No provider, installer, runtime,
+  fixed question count, confidence threshold, model-family requirement, or
+  performance claim is adopted.
+- **Diátaxis, _A systematic approach to technical documentation_.**
+  [Primary framework](https://diataxis.fr/), inspected 2026-09-05. Used as an
+  optional reader-needs lens for substantial documentation, not a universal
+  per-file taxonomy or four-document requirement.
+
 ### Original-preference and fallback contract
 
 `skills/software-engineering-handbook/experts/registry.json` owns provider and

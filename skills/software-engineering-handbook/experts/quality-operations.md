@@ -12,6 +12,9 @@ contract, start with one discriminating failing check, implement the minimum
 root-cause change, then refactor under green evidence. Use the handbook's
 risk-based deviations when a test cannot precede the change. Do not commit a
 scaffold, mock-only path, or layer without end-to-end behavior.
+An explicitly authorized staged migration is a usable slice only when its
+interim behavior, compatibility boundary, and recovery are specified and
+verified. Do not present that stage as completion of the final cutover.
 
 ## Browser verification and debugging
 
@@ -47,6 +50,11 @@ failure containment. Validate at boundaries, use least privilege and secure
 defaults, and fail closed for authorization or evidence-integrity failures.
 Security review cannot be replaced by a checklist, self-review, or a successful
 build.
+Ground material findings in a concrete affected path, preconditions, impact,
+and discriminating evidence. Confidence scores and false-positive exclusions
+are project-specific aids, not universal gates or permission to suppress a
+plausible material risk. Another model family may add a perspective; it does
+not establish reviewer independence or substitute for required validation.
 
 ## Performance optimization
 
@@ -77,6 +85,10 @@ path, deadline or review event, and removal condition. Clean cutovers remove
 obsolete aliases and paths. Documentation records current behavior and why;
 ADRs are for material durable decisions, not routine code choices. Update every
 affected contract document in the same governed change and remove stale claims.
+For a substantial documentation surface, distinguish reader needs such as
+tutorials, task-oriented how-to guidance, reference, and explanation. Use those
+needs to find missing coverage, not to require four documents per entity or a
+classification ceremony for every changed file.
 
 ## Observability and launch
 

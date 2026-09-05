@@ -96,9 +96,10 @@ after side effects; reconcile at a safe boundary and resolve again.
 
 ### Resolution
 
-When multiple capabilities plausibly match, read `experts/purposes.json` first,
-then `experts/resolution.md` and only the relevant descriptors in
-`experts/registry.json`. Equivalent provider skills are alternatives, never
+When multiple capabilities plausibly match, retrieve only the matching purpose
+and complete owning descriptors using host-native filtering or the optional
+bounded query documented in `experts/resolution.md`; do not read both whole
+catalogs into context. Equivalent provider skills are alternatives, never
 companions. Resolve purpose, scope, prerequisites, dependencies, conflicts, and
 original availability before loading bodies. Select the smallest compatible
 set, at most one primary workflow expert, and only specialists with distinct
@@ -126,10 +127,8 @@ The source identities, adaptation maps, exclusions, and update rules are in
    chapter only when the task spans it or a chapter-wide R3–R4 failure mode
    requires it. Secondary chapters remain section-only unless the same test
    applies.
-3. Load only the selected section of an expert module. Use
-   `experts/purposes.json` to suppress semantic duplicates, then
-   `experts/resolution.md` and only matching descriptors from
-   `experts/registry.json` when selection is ambiguous.
+3. After resolution, load only the selected expert section, not the module's
+   unrelated sections. Reuse unchanged sources already in working context.
 4. Read `../../handbook/software-engineering/references.md` only when source
    selection, provenance, or an external standard materially affects the task.
 
