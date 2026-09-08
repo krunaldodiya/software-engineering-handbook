@@ -16,13 +16,12 @@ REGISTRY = ROOT / "experts" / "registry.json"
 PURPOSES = ROOT / "experts" / "purposes.json"
 SKILL = ROOT / "SKILL.md"
 MANAGED_SKILL = MANAGED_ROOT / "SKILL.md"
-PACKAGE_VERSION = "1.6.0"
+PACKAGE_VERSION = "2.0.0"
 REQUIRED_PACKAGE_PAYLOAD_ROOTS = {
     ".agents",
     ".claude-plugin",
     ".codex-plugin",
     ".kimi-plugin",
-    ".opencode",
     "handbook",
     "managed-skills",
     "rules",
@@ -387,9 +386,8 @@ def choose_procedure_improvement_route(
     fallback_available: bool = True,
 ) -> str:
     explicitly_requested = "explicit-improvement-request" in facts
-    causally_attributed = (
-        PROCEDURE_IMPROVEMENT_CAUSAL_FACT in facts
-        and bool(facts & PROCEDURE_IMPROVEMENT_EVIDENCE_TRIGGERS)
+    causally_attributed = PROCEDURE_IMPROVEMENT_CAUSAL_FACT in facts and bool(
+        facts & PROCEDURE_IMPROVEMENT_EVIDENCE_TRIGGERS
     )
     if not explicitly_requested and not causally_attributed:
         return "not-selected"
@@ -1034,8 +1032,22 @@ def validate_package(policy: dict[str, object]) -> None:
     check(package.get("version") == PACKAGE_VERSION, "package version")
     check(package.get("license") == "MIT", "package license")
     check(
-        package.get("main") == ".opencode/plugins/software-engineering-handbook.js",
-        "package main",
+        not any(field in package for field in ("main", "module", "exports")),
+        "code-free package entrypoints",
+    )
+    check(
+        not any(
+            package.get(field)
+            for field in (
+                "dependencies",
+                "devDependencies",
+                "optionalDependencies",
+                "peerDependencies",
+                "bundledDependencies",
+                "bundleDependencies",
+            )
+        ),
+        "JavaScript package dependencies are not supported",
     )
     check(package.get("pi") == {"skills": ["./skills"]}, "Pi skill manifest")
     keywords = package.get("keywords")
@@ -1055,6 +1067,15 @@ def validate_package(policy: dict[str, object]) -> None:
         not package_payload_is_complete({"skills"}),
         "skill-only package payload rejection",
     )
+    for payload_root in payload_roots:
+        root_path = REPO_ROOT / payload_root
+        payload_paths = root_path.rglob("*") if root_path.is_dir() else (root_path,)
+        for payload_path in payload_paths:
+            check(
+                payload_path.suffix.lower()
+                not in {".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx"},
+                f"JavaScript/TypeScript package payload: {payload_path}",
+            )
 
     versioned_manifests = (
         ".claude-plugin/plugin.json",
@@ -1154,8 +1175,7 @@ def validate_package(policy: dict[str, object]) -> None:
         "blockage, or measured recurring cost; exclude unresolved higher-authority "
         "conflict and authority/evidence-bypass requests | trusted "
         "`superpowers/writing-skills` when available; otherwise "
-        "`experts/procedure-improvement.md` |"
-        in canonical_skill,
+        "`experts/procedure-improvement.md` |" in canonical_skill,
         "procedure improvement fast route",
     )
     procedure_contract = " ".join(
@@ -1167,10 +1187,7 @@ def validate_package(policy: dict[str, object]) -> None:
         .split()
     )
     architecture_contract = " ".join(
-        (
-            REPO_ROOT
-            / "handbook/software-engineering/02-architecture-code-quality.md"
-        )
+        (REPO_ROOT / "handbook/software-engineering/02-architecture-code-quality.md")
         .read_text()
         .split()
     )
@@ -1203,9 +1220,7 @@ def validate_package(policy: dict[str, object]) -> None:
             fragment in architecture_contract,
             f"architecture procedure contract: {fragment}",
         )
-    references = (
-        REPO_ROOT / "handbook/software-engineering/references.md"
-    ).read_text()
+    references = (REPO_ROOT / "handbook/software-engineering/references.md").read_text()
     for license_path in (
         "skills/skill-creator/LICENSE.txt",
         "skillopt/blob/db46cd9ae7ce12f1dbd73c945185816aa738751d/LICENSE",
@@ -1216,16 +1231,6 @@ def validate_package(policy: dict[str, object]) -> None:
     gemini_context = (REPO_ROOT / "GEMINI.md").read_text()
     check(len(gemini_context.encode()) <= 1024, "Gemini startup context budget")
     check("@./" not in gemini_context, "Gemini eager body import")
-
-    opencode_adapter = (
-        REPO_ROOT / ".opencode/plugins/software-engineering-handbook.js"
-    ).read_text()
-    check(len(opencode_adapter.encode()) <= 2048, "OpenCode adapter budget")
-    check(
-        "messages.transform" not in opencode_adapter
-        and "readFile" not in opencode_adapter,
-        "OpenCode startup body injection",
-    )
 
     validate_portable_host_boundary()
 

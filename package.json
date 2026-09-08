@@ -1,9 +1,7 @@
 {
   "name": "software-engineering-handbook",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "Risk-scaled software-engineering handbook with sparse expert routing",
-  "type": "module",
-  "main": ".opencode/plugins/software-engineering-handbook.js",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -22,7 +20,6 @@
     ".claude-plugin",
     ".codex-plugin",
     ".kimi-plugin",
-    ".opencode",
     "handbook",
     "managed-skills",
     "rules",
