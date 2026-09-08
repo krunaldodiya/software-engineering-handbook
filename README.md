@@ -8,6 +8,10 @@ mixture-of-experts skill router for humans, teams, and AI coding agents.
 > **Context-first:** agents discover a tiny descriptor at startup and load only
 > the handbook and expert sections required by the current task.
 
+Executable utilities are Python-only and use the standard library. Harness
+manifests remain declarative JSON; no JavaScript adapter or JavaScript package
+dependency is required. Native host configuration provides OpenCode discovery.
+
 ## Table of contents
 
 - [Quick start](#quick-start)
@@ -465,19 +469,45 @@ Run `/reload` or start a new Kimi session after installation.
 
 ### OpenCode
 
-Add the Git-backed package to the `plugin` array in global or project
-`opencode.json`:
+Keep a complete checkout of the package, not a standalone copy of `SKILL.md`:
+
+```sh
+git clone https://github.com/krunaldodiya/software-engineering-handbook.git \
+  "$HOME/.local/share/software-engineering-handbook"
+```
+
+Select a reviewed commit or tag in that checkout. Merge its `skills` directory
+into `skills.paths` in your global or project `opencode.json`, preserving existing
+paths and unrelated configuration:
 
 ```json
 {
-  "plugin": [
-    "software-engineering-handbook@git+https://github.com/krunaldodiya/software-engineering-handbook.git"
-  ]
+  "skills": {
+    "paths": [
+      "~/.local/share/software-engineering-handbook/skills"
+    ]
+  }
 }
 ```
 
-Restart OpenCode. Its small adapter registers the skill path without injecting
-handbook content.
+OpenCode's native discovery replaces the former JavaScript plugin. Start a new
+session and use `opencode debug skill` to confirm that
+`software-engineering-handbook` resolves to this checkout's canonical `SKILL.md`.
+The complete checkout keeps its relative handbook and expert references valid;
+the router body is still loaded on demand, not injected at startup.
+
+**Migration from package 1.x:** before switching to package 2.x, remove only this
+handbook's Git-backed entry from OpenCode's `plugin` array and add the native
+`skills.paths` entry above. If you manually installed its old JavaScript file or
+symlink under an OpenCode plugins directory, remove that handbook adapter too.
+Preserve every unrelated plugin and setting. Package 2.0.0 deliberately retires
+the JavaScript package entrypoint; it is a data-and-Python-utilities package, not
+an executable OpenCode plugin. Other harness installation routes are unchanged.
+
+For updates, fetch and select the next reviewed revision in the same complete
+checkout, then start a new session. Keep the previous reviewed revision for
+rollback. See OpenCode's [skill discovery](https://opencode.ai/docs/skills/) and
+[configuration documentation](https://opencode.ai/docs/config/).
 
 ### Hermes Agent
 
@@ -556,8 +586,7 @@ activation. Concrete install commands remain in the scoped host sections above.
 - `managed-skills/software-engineering-handbook/` — package query/validation
   utilities and the tiny OMP adapter.
 - Harness manifests under `.agents/`, `.claude-plugin/`, `.codex-plugin/`,
-  `.kimi-plugin/`, and `.opencode/`, plus root Agent Plugins v1, Gemini, and Pi
-  manifests.
+  and `.kimi-plugin/`, plus root Agent Plugins v1, Gemini, and Pi manifests.
 - `rules/engineering-handbook-enforcement.md` — OMP global-rule adapter.
 
 ## Validate and contribute
