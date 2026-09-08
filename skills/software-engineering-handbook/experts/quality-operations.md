@@ -29,6 +29,11 @@ fix. Stop and reassess architecture or hidden shared state after repeated
 materially distinct failed fixes. Never hide the error or replace real evidence
 with a fallback that claims success.
 
+For compile, link, build, or static-type failures, use chapter 3's
+[build and compiler diagnostic recovery](../../../handbook/software-engineering/03-tdd-testing-debugging.md#build-and-compiler-diagnostic-recovery):
+localize the failing stage, separate causal diagnostics from cascades, and
+verify the repaired contract rather than treating a green build as runtime proof.
+
 ## Review and simplification
 
 Original skills: `code-review-and-quality`, `code-simplification`.
@@ -39,6 +44,10 @@ against source, make bounded corrections, and re-review changed risk boundaries.
 Simplify only after behavior is understood; preserve external contracts and
 Chesterton's Fence for unknown constraints. Use the Ponytail expert for a
 focused over-engineering pass.
+
+For an independent review, use the fresh-context procedure in
+[chapter 4 GCS-2](../../../handbook/software-engineering/04-git-ci-cd-security.md#gcs-2--protected-integration-and-final-revision-review).
+Keep authoritative facts and known failures; do not inherit the author's verdict.
 
 ## Security and hardening
 
@@ -55,6 +64,11 @@ and discriminating evidence. Confidence scores and false-positive exclusions
 are project-specific aids, not universal gates or permission to suppress a
 plausible material risk. Another model family may add a perspective; it does
 not establish reviewer independence or substitute for required validation.
+
+When agent configuration or tooling crosses a trust boundary, apply
+[chapter 4's harness configuration review](../../../handbook/software-engineering/04-git-ci-cd-security.md#agent-harness-and-configuration-review).
+Inspect effective permissions and executable/data destinations without
+activating untrusted hooks or installing a scanner merely to perform the audit.
 
 ## Performance optimization
 

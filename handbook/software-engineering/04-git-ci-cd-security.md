@@ -75,6 +75,23 @@ The rules in this section state outcomes every project can implement without ado
    verdict remain demonstrably applicable; broader reach requires broader
    review.
 
+#### Fresh-context reviewer isolation
+
+An independent agent review SHOULD start in a separate context that has not
+participated in writing the candidate. Supply the factual review package above,
+including governing decisions, known failures, and uncertainty; do not copy the
+implementation conversation or present the author's confidence as a finding.
+The reviewer SHOULD inspect the contract and candidate and record an initial
+assessment before reconciling prior opinions. Necessary design rationale and
+adverse evidence MUST NOT be withheld in the name of avoiding bias.
+
+A new role label, context reset, or different model alone does not establish
+independence. Record the reviewer, exact subject, non-mutating assignment,
+available isolation controls, and limits. Reuse source facts, not inherited
+approvals. If the host cannot provide the required independent context or actor,
+use an authorized independent human or another approved review surface; otherwise
+pause the approval that depends on it, not unrelated authorized preparation.
+
 These outcomes reflect SLSA’s protected-reference, continuity, human-readable-change, and final-revision review concepts without requiring a specific SLSA level or source-control product.
 
 ### GCS-3 — Evidence bound to the exact candidate
@@ -117,6 +134,34 @@ NIST SSDF practices PO.3/PO.4 and PW.7/PW.8 support automated evidence and defin
 6. Secret access MUST be attributable and revocable. Rotation or revocation MUST occur after suspected disclosure, role change, or compromise according to risk. Removing a secret from the latest source revision is not remediation when history, logs, caches, or artifacts still contain it.
 7. A discovered secret exposure MUST be treated as an incident: revoke or contain first, assess every copy and use, rotate dependent credentials, then use the governed expunging process if history cleanup is necessary. The cleanup MUST NOT conceal the incident record.
 8. Build and workflow dependencies that can execute code or influence evidence MUST be treated as privileged dependencies. They MUST be pinned to an immutable identity or resolved under an equivalently integrity-protected mechanism, with changes reviewed before privileged use.
+
+#### Agent harness and configuration review
+
+When adopting or changing an agent harness's execution, instruction, data, or
+permission boundary, apply GCS-5 to the effective configuration, not just the
+edited file. A bounded review SHOULD:
+
+1. Identify loaded instruction, skill, memory, configuration and override sources,
+   their owners and integrity identities, and the precedence that determines
+   what actually runs. Distinguish trusted governing instructions from material
+   merely being inspected.
+2. Trace executable hooks, plugins, tool servers and subprocesses to their
+   resolved code and arguments; identify network destinations, credential
+   exposure, filesystem access, persistence and inherited permissions.
+3. Compare effective privileges and data flows with the authorized task.
+   Check whether retrieved text, tool responses or configuration values can
+   become commands, instructions, secret disclosure, or permission changes.
+   Delegation and remote access MUST NOT enlarge the underlying authority.
+4. Record each material finding's source, trigger, affected asset, impact,
+   evidence and bounded correction. Redact private values from the receipt.
+
+Inspect before activating discovered code; an audit request does not authorize
+running hooks, installing scanners, changing permissions or disclosing
+configuration externally. Use approved inspection capabilities; a named scanner,
+model, vendor-specific directory or numeric grade is not required. If effective
+behavior cannot be established safely, record that uncertainty and block only
+the affected activation or approval. Scanner success is not proof of a safe
+configuration, and scanner absence is not proof of a vulnerability.
 
 ### GCS-6 — Dependency and supply-chain control
 

@@ -102,6 +102,14 @@ Version identifiers need not use a universal numbering scheme. They need to dist
 
 This rule favors functional cores and imperative shells where useful; it does not require functional programming, dependency injection frameworks, or process isolation.
 
+For tool-versus-model decisions, apply the objective-evidence boundary in
+[§12](#12-reusable-procedures-and-skills): deterministic checks establish exact
+properties; semantic judgment supplements them for meaning or ambiguity, never
+overrides a mandatory failure. Choose a format-aware parser for a defined
+grammar rather than assuming regular expressions fit every structure.
+The typed-contract and error rules in §§4 and 6 still own malformed,
+unsupported and uncertain outcomes; model confidence is not validation.
+
 ### 6. Errors and failure behavior
 
 - Expected failure modes **MUST** be part of the contract and represented distinctly enough for the caller to choose a correct response.

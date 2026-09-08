@@ -57,6 +57,35 @@ Apply the first adequate reduction and stop:
 7. Bound retries, searches, generated output, and repeated reviews. Stop when the
    decision is supported or the exact missing prerequisite is known.
 
+## Progressive context retrieval
+
+Use this pattern when a delegated or resumed task lacks material context or
+repeatedly retrieves irrelevant content; do not introduce another agent merely
+to perform the loop.
+
+1. Start with the bounded objective, authority, acceptance criteria, ownership,
+   known failures and unresolved questions. Supply source identities and precise
+   locations for the governing sections and affected code, not a transcript
+   dump. Confirm the recipient can actually retrieve those references.
+2. Read the smallest relevant section and identify which question it answers.
+   Keep evidence separate from hypotheses. Record the remaining gap before
+   choosing the next search.
+3. Refine terminology using observed symbols and repository conventions, follow
+   relevant callers or dependencies, or widen the search boundary only enough
+   to address that gap. An empty or truncated result is not proof of absence;
+   check query validity and scope before drawing that conclusion.
+4. Return a compact evidence-bearing answer with source locations, revision,
+   limitations and unresolved questions. Reuse unchanged material; refresh
+   affected references after source drift or a changed task boundary.
+
+Choose a finite search/time bound appropriate to the task, not a universal
+cycle count, relevance score or minimum file count. Stop when the decision is
+supported or the exact missing prerequisite is known. If a source is not
+accessible to the recipient, request a narrowly scoped, authorized excerpt
+with its identity or route the lookup to an authorized actor. Preserve required
+authority, adverse evidence and privacy; never guess the missing content or
+move private data across an unauthorized boundary to satisfy a context budget.
+
 ## Context compression and continuity
 
 Mask duplicate, superseded, or resolved tool output behind a retrievable

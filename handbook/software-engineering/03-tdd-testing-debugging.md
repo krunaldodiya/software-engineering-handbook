@@ -168,6 +168,34 @@ Debugging stops only in one of these states:
 
 Masking an exception, increasing a timeout, adding retries, broadening an accepted result, or suppressing a signal MUST NOT be called a root-cause fix unless the authoritative contract establishes that behavior and the causal mechanism is addressed.
 
+#### Build and compiler diagnostic recovery
+
+For a build, compile, link, or static-type failure, apply the investigation loop
+above to the failing stage before treating it as a runtime defect:
+
+1. Retain the repository-defined invocation, complete diagnostics, exit status,
+   source revision, toolchain and dependency identities, and relevant build
+   configuration. If the toolchain is unavailable, use retained evidence to
+   investigate but report reproduction and verification as unavailable.
+2. Group diagnostics by causal dependency. Identify the earliest failing
+   producer or contract in the build graph; the first printed error need not be
+   the root cause. Distinguish downstream cascades from independent failures.
+3. Compare the failing stage with a known-good source/configuration combination.
+   Repair the narrowest evidenced cause in source, generated-source inputs,
+   configuration, or dependency resolution. Do not hand-edit generated output
+   when its authoritative input owns the defect.
+4. Rerun the affected stage, inspect which diagnostics disappear, then challenge
+   the repaired contract and run the applicable repository gates. A successful
+   compile establishes neither correct runtime behavior nor release readiness.
+
+Deleting lockfiles, reinstalling newer dependencies, clearing caches, weakening
+types, or suppressing diagnostics MUST NOT substitute for causal evidence.
+A cache or dependency intervention requires a specific hypothesis, preserved
+resolution/evidence, and authority for its effects. A necessary structural or
+contract change leaves the bounded recovery scope until its authority and
+acceptance conditions are resolved; it is not forbidden merely to keep a diff
+small. The existing attempt bound and stop states above still apply.
+
 ### 9. Profile before optimizing
 
 A performance or resource optimization MUST begin with a measurable claim and a representative baseline. The measurement MUST state the metric, workload and data shape, environment, configuration, revision, warm-up or steady-state treatment, sampling method, and observed variance. Optimization MUST target an observed constraint or hotspot; intuition alone is insufficient for a material performance claim.

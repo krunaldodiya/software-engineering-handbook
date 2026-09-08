@@ -133,6 +133,21 @@ baseline and candidate results, approver, residual limits, rollback identity,
 and observation point. Activation in a host is a separate effect from accepting
 the source change.
 
+For an installed procedure, refresh from the exact delivered revision through
+the authorized host mechanism and compare the installed instruction payload
+with that revision. A version label or successful installer exit alone does not
+prove identity. Record any packaging transformation and its verified mapping;
+an unexplained mismatch blocks the claim of activation. Keep the prior approved
+payload or immutable reference and the restoration method outside automatic
+discovery before replacing it.
+
+Verify the host's effective discovery in a fresh session or documented reload:
+which source actually resolves, whether another installation shadows it, and
+whether the discovered payload matches the accepted content. State unavailable
+discovery evidence and any required restart. Do not claim that conversations
+which already loaded older instructions have adopted the update. Source
+publication, installed bytes, discovery, and observed use are distinct evidence.
+
 After adoption, observe the declared real task boundary. Roll back or disable
 the candidate when it causes a mandatory regression, unauthorized effect, or
 material deterioration. A later review MAY retire obsolete rules or fixtures;
