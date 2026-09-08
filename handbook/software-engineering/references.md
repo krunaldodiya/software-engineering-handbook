@@ -379,6 +379,32 @@ without turning non-blocking improvements into blockers.
   optional reader-needs lens for substantial documentation, not a universal
   per-file taxonomy or four-document requirement.
 
+#### Portable refinements informed by ECC
+
+- **Affaan Mustafa and contributors, _Everything Claude Code_ — commit
+  `e04ea0b9cc8248686edf5ac751cadff550e162b8`, inspected 2026-09-08.**
+  [Pinned source](https://github.com/affaan-m/everything-claude-code/tree/e04ea0b9cc8248686edf5ac751cadff550e162b8);
+  [MIT license](https://github.com/affaan-m/everything-claude-code/blob/e04ea0b9cc8248686edf5ac751cadff550e162b8/LICENSE).
+  Reviewed as a conceptual reference, not installed or registered as another
+  provider. Techniques are independently expressed in existing owning sections.
+
+| Inspected source at the pinned revision | Existing boundary refined |
+|---|---|
+| `agents/build-error-resolver.md` | Chapter 3 §8: failing-stage diagnosis and causal diagnostic groups |
+| `agents/code-reviewer.md`, `the-longform-guide.md` | Chapter 4 GCS-2: factual handoff and fresh-context assessment; actor independence remains a handbook requirement |
+| `skills/iterative-retrieval/SKILL.md`, `the-longform-guide.md` | Context economics: question-driven, bounded retrieval refinement |
+| `skills/security-scan/SKILL.md` | Chapter 4 GCS-5: effective harness configuration, executable hooks, tool destinations and privileges |
+| `skills/regex-vs-llm-structured-text/SKILL.md` | Chapter 2 §§4–6 and §12: navigation to existing objective/semantic evidence rules, with format-aware parsing rather than a universal regex preference |
+
+The adaptation excludes named models and pricing tables, host commands and
+directories as universal requirements, automatic scanner or hook installation,
+fixed confidence/relevance scores, mandatory phase/cycle counts, cache or
+lockfile deletion recipes, and upstream performance ratios. These exclusions
+bound this adaptation; they do not claim ECC must be installed wholesale.
+No upstream text, executable code, runtime, or router is bundled. The handbook's
+existing safety, authority, sparse routing and evidence rules remain governing;
+host-specific implementation details belong only in scoped adapters.
+
 ### Original-preference and fallback contract
 
 `skills/software-engineering-handbook/experts/registry.json` owns provider and

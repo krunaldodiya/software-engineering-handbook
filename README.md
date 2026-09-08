@@ -123,6 +123,15 @@ services:
 | [Git, CI/CD, and security](handbook/software-engineering/04-git-ci-cd-security.md) | Coherent commits, protected integration, exact-revision review, CI gates, secrets, supply-chain controls, artifact provenance, authorized release, recovery, and vulnerability response |
 | [Agile atomic delivery](handbook/software-engineering/05-agile-atomic-delivery.md) | Usable vertical slices, sequencing, bounded work, coordination, feedback, Definition of Done, and evidence-bearing handoff without mandating a sprint length or tracker |
 
+Targeted workflow refinements live in the existing chapters and experts:
+[build diagnostic recovery](handbook/software-engineering/03-tdd-testing-debugging.md#build-and-compiler-diagnostic-recovery),
+[fresh-context review](handbook/software-engineering/04-git-ci-cd-security.md#fresh-context-reviewer-isolation),
+[harness configuration review](handbook/software-engineering/04-git-ci-cd-security.md#agent-harness-and-configuration-review),
+[progressive retrieval](skills/software-engineering-handbook/experts/context-economics.md#progressive-context-retrieval),
+and the [objective-versus-semantic evidence boundary](handbook/software-engineering/02-architecture-code-quality.md#5-deterministic-core-and-controlled-side-effects).
+These are model-, provider-, and harness-neutral techniques, not additional
+registered workflows or a requirement to install their reference sources.
+
 ### Complete capability inventory
 
 The inventory below covers **all 90 registered provider-qualified originals**
@@ -524,6 +533,19 @@ These integrations are intentionally deferred:
 Use the selected harness's normal plugin or skill update mechanism. For
 reproducible use, install a reviewed tag or commit instead of a moving branch
 when the harness supports immutable references.
+
+Completion of a handbook update includes refreshing the installed skill from
+the exact delivered revision, comparing its instruction payload with that
+revision, and verifying which source the host actually discovers. Package
+version labels alone are insufficient, including for prose-only revisions
+that retain the same package version. Keep the prior approved reference or
+payload for rollback. Use the host's documented reload or a fresh session;
+existing conversations may retain older instructions.
+
+Follow the portable
+[adoption and rollback procedure](skills/software-engineering-handbook/experts/procedure-improvement.md#6-adopt-observe-and-roll-back).
+Report an unavailable identity or discovery check as a limitation, not successful
+activation. Concrete install commands remain in the scoped host sections above.
 
 ## Repository contents
 
