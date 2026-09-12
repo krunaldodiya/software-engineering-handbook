@@ -257,11 +257,13 @@ The default goal-mode topology SHOULD be one accountable coordinator supervising
 one dedicated goal-running executor, followed by coordinator-started independent
 reviewers. Goal mode is an execution loop on that executor; it does not by
 itself create a reasoning-only manager or authorize a nested agent hierarchy.
-The coordinator retains top-level interpretation, goal framing, scope and
-contract decisions, mutation ownership, integration, review routing,
-repository-wide verification, and delivery claims. The goal-running executor
-directly performs its assigned edits and focused checks within the frozen
-boundary.
+The coordinator owns topology, assignment, sequencing, arbitration, integration
+decisions, and publication routing and decision coordination; it does not
+thereby own routine mutation or authorize publication. Publication remains
+subject to the separately established authorized owner and applicable chapter 4
+controls. The goal-running executor is the sole mutation owner for its assigned
+boundary and directly performs its assigned edits and focused checks within the
+frozen boundary.
 
 A goal-running executor MUST NOT recursively delegate or spawn agents unless the
 governing work explicitly defines a multi-agent topology, producer/consumer
@@ -353,18 +355,40 @@ Independent slices SHOULD run concurrently; shared mutations MUST have one
 owner or be serialized. Agents MUST NOT invent producer/consumer contracts
 independently or recursively delegate direction they do not own.
 
+Route responsibility explicitly: a planner or architect resolves consequential
+contracts and design; a coordinator owns topology, assignment, sequencing,
+arbitration, integration decisions, review routing, the governing record, and
+publication routing and decision coordination, but does not thereby own routine
+mutation or authorize publication; publication remains subject to the separately
+established authorized owner and applicable chapter 4 controls; an implementation
+executor
+is the sole mutation owner for its assigned boundary and owns focused checks; and
+a scout or mechanical worker performs read-only discovery or repetitive bounded
+work. An independent reviewer challenges stable candidate bytes without
+responsibility to justify their implementation. These are responsibility
+boundaries, not deployment-model names or authority grants.
+
 Reviewers MUST inspect one stable candidate. An interrupted, incomplete,
 stale-revision, or partially delivered review has no verdict, and any reviewed
 byte change invalidates the prior verdict. Repository-wide gates SHOULD run once
 on the integrated stable candidate rather than redundantly in every worker.
 
 Executor and model selection SHOULD use the least costly capability that can
-reliably satisfy the role: mechanical work may use a focused executor;
-cross-boundary integration needs broader context; consequential design,
-security, domain decisions, and independent final review need the competence
-required by their risk. Price or speed MUST NOT lower the required independence,
-authority, or judgment, and the selected role SHOULD be explicit in the
-assignment.
+reliably satisfy the role: scouting and mechanical work may use a focused,
+low-cost worker; cross-boundary integration needs broader context; consequential
+design, security, domain decisions, and independent final review need the
+competence required by their risk. Price or speed MUST NOT lower the required
+independence, authority, or judgment, and the selected role SHOULD be explicit
+in the assignment.
+
+A coordinator or delegating parent MUST NOT normally take over an executor's
+mutation scope. Takeover is an exceptional recovery and MAY occur only when
+explicitly authorized for a lost, stalled, or incompatible executor or an
+explicitly canceled assignment. Before mutation resumes, it MUST preserve and
+revalidate the current state, establish a safe handoff, end the prior mutation
+assignment, and re-establish single-writer ownership. It MUST record the
+authorization, reason, scope, checkpoint, and next validation in the recovery
+ledger.
 
 While agents are running, the coordinator SHOULD advance independent local work
 rather than poll repeatedly. When genuinely idle, it SHOULD use bounded waits
@@ -418,14 +442,38 @@ MUST trigger the debugging architecture breaker in chapter 3 rather than
 unbounded reviewer/fixer churn. A current-slice blocker cannot be parked or
 outvoted merely because a round limit was reached.
 
-Long-running, multi-agent, or compaction-prone execution MUST retain a recovery
-ledger outside transient conversation memory. The ledger SHOULD identify the
-governing plan or goal, task state, material rulings and assumptions, executor
-assignments, exact revisions or artifacts, observed evidence, open findings,
-and next action. It MAY live in harness state, an ignored owned workspace, or
-the governing record; it MUST NOT create repository documentation or expose
-sensitive data merely for bookkeeping. On resume, current authoritative state
-and artifact identities MUST be revalidated before the ledger is trusted.
+Long-running, multi-agent, or compaction-prone execution MUST retain a durable
+dependency graph and recovery ledger outside transient conversation memory. For
+each node, the ledger SHOULD identify its owner and mutation boundary,
+predecessors and dependents, exact criterion or evidence claim, state,
+checkpoint revision or artifact, observed evidence and open finding, next
+action, and bounded attempt, time, context, or cost budget. It MAY live in
+harness state, an ignored owned workspace, or the governing record; it MUST NOT
+create repository documentation or expose sensitive data merely for
+bookkeeping.
+
+Every executable or validation node MUST have an explicit recovery edge:
+diagnose the observed failure, make a bounded in-scope repair or retry only
+where the diagnosis supports it, then retest the exact failed criterion on the
+current candidate. A failed acceptance criterion blocks that criterion and its
+dependent claims, not unrelated authorized nodes. Routine execution or
+acceptance-infrastructure failures are operational failures, not authority
+boundaries: preserve their evidence and use that recovery edge when the repair
+is authorized. Retrying a flaky check until green, concealing a failed required
+gate, or treating a provider safety refusal as a transient failure is prohibited.
+
+When a node reaches its budget or cannot recover in scope, its owner MUST record
+the evidence and choose the least costly adequate escalation: another bounded
+recovery path, a more capable role, or a decision/authority route. Budget
+exhaustion is neither acceptance nor a reason for routine parent takeover. A
+human pause is required only for a real authority, safety, product,
+protected-external-effect, or release boundary; it pauses the affected node and
+its dependents while independent authorized work continues.
+
+On checkpoint or resume, the coordinator MUST revalidate current authoritative
+state, artifact identities, predecessors, ownership, budgets, and applicability
+of recorded evidence before continuing from the last verified checkpoint. A
+restored session or ledger alone MUST NOT authorize stale work.
 
 ## Lightweight workflow
 
