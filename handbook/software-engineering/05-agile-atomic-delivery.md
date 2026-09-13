@@ -128,6 +128,14 @@ prerequisite and the exact work boundary it blocks.
 
 Within an ongoing delivery system, each delivery unit—an individual, agent pool, team, or service group—MUST have an explicit WIP policy appropriate to its capacity and risk. The policy MAY be a numeric limit or a rule such as “one primary slice per executor,” but it MUST count waiting work and make breaches visible. An isolated R1 slice uses the built-in single-active-slice default above and requires no separate WIP record.
 
+Unless an explicit capacity policy establishes a different safe limit, one
+interactive coordinator has one active delivery outcome. Parallel workers or
+reviewers MAY serve that same outcome when ownership, dependency, or independence
+requires them; available executors do not create capacity for unrelated outcomes.
+A waiting review or external prerequisite remains WIP. Starting unrelated work
+requires the current outcome to be completed, explicitly paused or stopped, or
+displaced through the authorized priority process.
+
 New work MUST NOT be started when the applicable WIP limit is reached unless an authorized expedite condition applies. The default response to blocked or aging work SHOULD be to unblock, pair, review, reduce scope while preserving the goal, or stop the work—not to open more unrelated work. If a unit instead starts additional work, it MUST record why that action reduces overall risk or delay and when the WIP breach will end.
 
 Urgent work SHOULD displace or pause lower-priority work explicitly rather than silently increase WIP. A WIP limit MUST NOT prevent immediate containment of a safety, security, privacy, availability, or data-integrity incident.
@@ -390,6 +398,16 @@ assignment, and re-establish single-writer ownership. It MUST record the
 authorization, reason, scope, checkpoint, and next validation in the recovery
 ledger.
 
+An interactive coordinator MUST preserve the foreground for user input.
+Long-running delegated work is submitted asynchronously and the coordinator
+returns control rather than occupying the foreground with a lifecycle wait.
+Completion or attention SHOULD arrive through a supported host event or
+notification; the coordinator then verifies authoritative lifecycle state and
+captures the complete result. A missing event facility MUST be disclosed, not
+replaced with sleep, status polling, synthetic user input, or a child prompt sent
+to the coordinator. Synchronous waiting is limited to headless/non-interactive
+execution or a short same-turn dependency that cannot delay user messages.
+
 When a governing owner or project policy selects Herdr delegation, this
 paragraph is the required topology rather than an optional display layer. It
 supersedes coordinator-native-child, run-registry, monitor-tab,
@@ -420,22 +438,27 @@ exact-byte-review routing, and delivery ownership. A Herdr-managed task tab is
 the assignment's execution surface, not a transfer of authority or proof of
 success, independence, filesystem isolation, or correctness.
 
-For serial work, the coordinator uses `herdr agent prompt <agent> <prompt>
---wait --timeout ...`. For independent concurrent work, it prompts the complete
-wave first without `--wait`, then uses `herdr agent wait <agent> --timeout ...`
-for each assignment. These Herdr native lifecycle waits replace polling, monitor
-tabs, hidden native children, run registries, callback bridges, and child
-self-callback requirements in this selected workflow. A settled `idle` or `done`
-state is only permission to inspect the result; it is not semantic success. The
-coordinator MUST read the complete settled result and verify its claimed
-evidence, then classify the assignment as success or failure. `blocked` requires
-inspection and authorized resolution; `working` requires continued waiting;
-`unknown`, timeout, or command failure requires diagnosis without duplicate
-prompting or unsafe closure.
+In an interactive coordinator, serial or concurrent Herdr work is submitted
+without `--wait`; the complete independent wave is prompted before control
+returns. A supported completion or attention notification starts later result
+capture. `herdr agent prompt ... --wait` and `herdr agent wait ...` are reserved
+for headless/non-interactive execution or a short same-turn dependency that
+cannot delay user input. These lifecycle operations replace polling, monitor
+tabs, hidden native children, and run registries; a project MUST NOT invent a
+child-to-coordinator prompt callback when Herdr lacks native event delivery. A
+settled `idle` or `done` state is only permission to inspect the result; it is not
+semantic success. The coordinator MUST read the complete settled result and
+verify its claimed evidence, then classify the assignment as success or failure.
+`blocked` requires inspection and authorized resolution; `working` remains
+active; `unknown`, timeout, or command failure requires diagnosis without
+duplicate prompting or unsafe closure.
 
-Observed smoke evidence currently proves Pi+Herdr native wait only. OMP and
-other supported kinds use this same Herdr lifecycle, but each still requires its
-installed native-argument verification; no OMP smoke is claimed.
+Observed smoke evidence currently proves Pi+Herdr native lifecycle wait only.
+Current CLI capability inspection also exposes `herdr notification show`, but
+notification delivery is configuration-dependent and no coordinator event
+subscription is claimed. OMP and other supported kinds use this same Herdr
+lifecycle, but each still requires its installed native-argument verification;
+no OMP smoke is claimed.
 
 The coordinator MUST capture the complete result, evidence, and needed artifact
 references before cleanup. It MAY close only the exact task-owned tab after the
@@ -584,6 +607,8 @@ Urgency, a deadline, sunk effort, small diff size, a passing broad test suite, o
 - **Delegation by filename:** splitting work by documents or components without giving each executor the outcome, boundaries, acceptance evidence, and integration owner.
 - **Lifecycle-as-success confusion:** treating an `idle` or `done` Herdr-managed-agent state as semantic success without capturing and checking the complete result and evidence.
 - **Obsolete delegation topology:** using native children, run registries, monitor tabs, callback bridges, child self-callbacks, hidden delegation, or polling when the governing policy selects the Herdr-managed-agent lifecycle.
+- **Foreground orchestration blockage:** holding an interactive conversation inside a long agent wait so user messages surface only after delegated work settles.
+- **Parallelism as WIP inflation:** starting unrelated delivery outcomes because additional agents or tabs are available while the coordinator's active outcome remains unfinished or unpaused.
 - **Demo theater:** presenting prepared output while avoiding the actual working path, failure case, or current integrated state.
 - **Metrics as quotas:** optimizing points, velocity, throughput, coverage, or cycle time at the expense of value, quality, safety, or truthful status.
 - **Retrospective archive:** repeatedly recording the same issue without an owned experiment, observation point, or explicit decision not to act.
