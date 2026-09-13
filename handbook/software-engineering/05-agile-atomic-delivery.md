@@ -390,18 +390,64 @@ assignment, and re-establish single-writer ownership. It MUST record the
 authorization, reason, scope, checkpoint, and next validation in the recovery
 ledger.
 
-While agents are running, the coordinator SHOULD advance independent local work
-rather than poll repeatedly. When genuinely idle, it SHOULD use bounded waits
-and periodically reconcile live assignments so a lost or stalled executor is
-detected. Absence of a report is not completion, and an active executor MUST NOT
-be interrupted solely to produce a progress update.
+When a governing owner or project policy selects Herdr delegation, this
+paragraph is the required topology rather than an optional display layer. It
+supersedes coordinator-native-child, run-registry, monitor-tab,
+callback-bridge, and child-callback approaches for that selected workflow. Every
+delegated implementation worker, scout, researcher, mechanical worker, and
+reviewer MUST be an actual instance of its explicitly assigned, Herdr-supported
+agent harness/kind in one newly created, dedicated, meaningfully labelled Herdr
+tab. The coordinator creates that tab with `--no-focus`, the intended checkout
+or isolated worktree as its exact cwd, and parses the returned tab and pane IDs.
+Before launch, it MUST verify installed `herdr agent` syntax, the exact supported
+kind, and the selected runtime's installed native arguments. The normative start
+form is `herdr agent start <name> --kind <exact-supported-kind> --pane <pane> -- <verified-runtime-args>`. It MUST pass the exact assigned model and
+effort/thinking through that selected runtime's verified native arguments;
+arguments from another runtime MUST NOT be reused without checking installed
+help. **Pi example only — verify installed Pi help before use; not a portable
+start form:** `herdr agent start <name> --kind pi --pane <pane> -- --model
+<exact-model> --thinking <exact-effort>`. Before assigning work, the coordinator
+MUST verify the exact assigned
+harness/kind, model, and effort/thinking from start output and exposed
+runtime/Herdr metadata. A mismatch, fallback, or inability to establish a
+required setting blocks accepting that assignment.
 
-Agent resources SHOULD follow a paired acquire/release lifecycle. After an
-agent's result, evidence, and needed artifact references are captured, its
-process, pane, tab, worktree, or other execution resource SHOULD be released
-promptly. Active agents MUST NOT be terminated merely for cosmetic cleanup or a
-timebox; let them reach a safe result or explicitly cancel them for a concrete
-correctness, authority, or operational reason.
+The coordinator gives the agent one complete assignment: outcome, authority,
+cwd or worktree, ownership and boundaries, allowed effects, checks and evidence,
+result contract, escalation path, and prohibition on nested delegation. The
+coordinator retains topology, integration, shared-file serialization,
+exact-byte-review routing, and delivery ownership. A Herdr-managed task tab is
+the assignment's execution surface, not a transfer of authority or proof of
+success, independence, filesystem isolation, or correctness.
+
+For serial work, the coordinator uses `herdr agent prompt <agent> <prompt>
+--wait --timeout ...`. For independent concurrent work, it prompts the complete
+wave first without `--wait`, then uses `herdr agent wait <agent> --timeout ...`
+for each assignment. These Herdr native lifecycle waits replace polling, monitor
+tabs, hidden native children, run registries, callback bridges, and child
+self-callback requirements in this selected workflow. A settled `idle` or `done`
+state is only permission to inspect the result; it is not semantic success. The
+coordinator MUST read the complete settled result and verify its claimed
+evidence, then classify the assignment as success or failure. `blocked` requires
+inspection and authorized resolution; `working` requires continued waiting;
+`unknown`, timeout, or command failure requires diagnosis without duplicate
+prompting or unsafe closure.
+
+Observed smoke evidence currently proves Pi+Herdr native wait only. OMP and
+other supported kinds use this same Herdr lifecycle, but each still requires its
+installed native-argument verification; no OMP smoke is claimed.
+
+The coordinator MUST capture the complete result, evidence, and needed artifact
+references before cleanup. It MAY close only the exact task-owned tab after the
+agent is `idle` or `done` and has no live persistent goal, remaining assignment,
+or other mutation remnant. It MUST NOT close the coordinator, an unrelated tab,
+or a working, blocked, unknown, or still-needed tab. If Herdr or the selected
+agent kind/runtime is unavailable under a policy that selects this topology, the
+coordinator MUST NOT silently substitute hidden/native delegation, a monitor
+workaround, or another competing orchestration surface. It continues safe
+coordinator-only work and pauses and discloses only the delegation or review
+claim that requires another agent, unless the owner explicitly authorizes a
+different topology.
 
 ### 16. Make plans executable and recovery state durable
 
@@ -536,6 +582,8 @@ Urgency, a deadline, sunk effort, small diff size, a passing broad test suite, o
 - **Ceremony as evidence:** counting stand-ups, planning sessions, agents, reviewers, approvals, or reports instead of observing the outcome.
 - **Autonomy without authority:** allowing an executor to expand scope, accept risk, cross a protected boundary, or self-approve because it can perform the action technically.
 - **Delegation by filename:** splitting work by documents or components without giving each executor the outcome, boundaries, acceptance evidence, and integration owner.
+- **Lifecycle-as-success confusion:** treating an `idle` or `done` Herdr-managed-agent state as semantic success without capturing and checking the complete result and evidence.
+- **Obsolete delegation topology:** using native children, run registries, monitor tabs, callback bridges, child self-callbacks, hidden delegation, or polling when the governing policy selects the Herdr-managed-agent lifecycle.
 - **Demo theater:** presenting prepared output while avoiding the actual working path, failure case, or current integrated state.
 - **Metrics as quotas:** optimizing points, velocity, throughput, coverage, or cycle time at the expense of value, quality, safety, or truthful status.
 - **Retrospective archive:** repeatedly recording the same issue without an owned experiment, observation point, or explicit decision not to act.

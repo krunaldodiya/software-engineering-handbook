@@ -47,7 +47,7 @@ compact index and load only the selected module or trusted original skill:
 | consequential ambiguity, specification, constraints, or task decomposition | `experts/requirements-planning.md` |
 | durable spec/change artifacts, consistency analysis, convergence, or canonical archive | the selected section of `experts/spec-delivery.md` |
 | multi-slice agile planning, readiness, course correction, status, walkthrough, or retrospective | the selected section of `experts/adaptive-agile.md` |
-| long-running autonomous or multi-agent execution, including recovery of that execution, checkpoint/resume of that execution, or responsibility routing for that execution | chapter 5 §§12, 15–16; add only a distinct selected expert |
+| delegation, including Herdr visibility; long-running, multi-agent, or recovery work | chapter 5 §§12, 15–16 |
 | unfamiliar context, external API facts, or high-consequence uncertainty | `experts/context-sources.md` |
 | context degradation, compression/handoff, recurring harness overhead, or token/model/agent cost | the selected section of `experts/context-economics.md` |
 | explicit procedure/skill improvement; or causally attributed procedure defect evidenced by repeated or material failure/near miss, sustained blockage, or measured recurring cost; exclude unresolved higher-authority conflict and authority/evidence-bypass requests | trusted `superpowers/writing-skills` when available; otherwise `experts/procedure-improvement.md` |
@@ -135,6 +135,7 @@ The source identities, adaptation maps, exclusions, and update rules are in
 
 ## Operating sequence
 
+- Before delegation, apply chapter 5 §15. If governing policy selects Herdr, use the registered `herdr` procedure for the required dedicated-tab lifecycle; never silently substitute another topology or treat settled state as success.
 - Classify consequence using the handbook's R1–R4 model; reclassify when new facts increase reach, irreversibility, uncertainty, or impact.
 - Resolve applicable local sources of truth and repository gates before choosing process or commands.
 - Define the observable outcome, authority, acceptance evidence, and lifecycle effects.
